@@ -1,0 +1,104 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--twitter-border-color);
+  padding-left: 20px;
+  padding-right: 20px;
+  align-items: flex-start;
+  /* margin-left: auto; */
+}
+
+.sidebar > .MuiSvgIcon-root {
+  margin: 0;
+  padding: 14px;
+}
+
+.sidebar__twitter-icon {
+  margin-top: 20px;
+  margin-left: 20px;
+  font-size: 30px !important;
+  color: var(--twitter-color);
+}
+
+.sidebar__button {
+  background-color: var(--twitter-color) !important;
+  border: 0 !important;
+  color: #fff !important;
+  font-weight: 300 !important;
+  border-radius: 9999px !important;
+  height: 40px !important;
+  margin-top: 20px !important;
+}
+
+.sidebar__button:hover {
+  background-color: #1a8cd8 !important;
+}
+
+.sidebar__round-button {
+  background-color: var(--twitter-color) !important;
+  margin-top: 20px !important;
+  border-radius: 9999px !important;
+  color: #fff !important;
+  padding: 10px !important;
+  margin-left: 4px !important;
+  /* left: 50% !important; */
+}
+
+.sidebar__round-button:hover {
+  background-color: #1a8cd8 !important;
+}
+
+.sidebar__option {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 9999px;
+  transition: color 0.15s ease-out;
+}
+
+.sidebar__option--active {
+  color: var(--twitter-color);
+}
+
+.sidebar__option:hover {
+  background-color: var(--button-background-color);
+  color: var(--twitter-color);
+}
+
+.sidebar__option > .MuiSvgIcon-root {
+  padding: 14px;
+}
+
+.sidebar__option > span {
+  font-size: 16px;
+  font-weight: 400;
+  margin-right: 20px;
+}
+
+.sidebar__user {
+  display: flex;
+  margin-top: auto;
+  margin-bottom: 20px;
+  padding: 12px;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 9999px;
+  transition: color 0.15s ease-out;
+}
+
+.sidebar__user:hover {
+  background-color: var(--button-background-color);
+}
+
+.sidebar__user__avatar {
+  display: flex;
+  border-radius: 9999px;
+}
+
+.sidebar__user__info {
+  display: flex;
+  flex-direction: column;
+  margin-right: 12px;
+  margin-left: 12px;
+}
