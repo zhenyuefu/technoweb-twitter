@@ -6,8 +6,8 @@
   "author": "zhenyue",
   "license": "MIT",
   "scripts": {
-    "start": "node build/app.js",
-    "dev": "tsc && nodemon build/app.js"
+    "start": "node build/server.js",
+    "dev": "tsc && nodemon build/server.js"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
