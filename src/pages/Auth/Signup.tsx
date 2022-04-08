@@ -72,7 +72,7 @@ function Signup() {
                       fullWidth
                       id="firstName"
                       label="First Name"
-                      error={fieldState.invalid ? true : false}
+                      error={fieldState.invalid}
                       autoFocus
                     />
                   )}
@@ -92,7 +92,7 @@ function Signup() {
                       label="Last Name"
                       name="lastName"
                       autoComplete="family-name"
-                      error={fieldState.invalid ? true : false}
+                      error={fieldState.invalid}
                     />
                   )}
                 />
@@ -103,9 +103,9 @@ function Signup() {
                   control={control}
                   rules={{
                     required: true,
-                    minLength: 4,
+                    minLength: 6,
                     maxLength: 16,
-                    pattern: /^[a-zA-Z0-9_-]{4,16}$/i,
+                    pattern: /^[a-zA-Z0-9_-]{6,16}$/i,
                   }}
                   defaultValue=""
                   render={({ field, fieldState }) => (
@@ -118,14 +118,14 @@ function Signup() {
                       type="username"
                       id="username"
                       autoComplete="username"
-                      error={fieldState.invalid ? true : false}
+                      error={fieldState.invalid}
                       helperText={
                         fieldState.error &&
                         (fieldState.error.type === "required"
                           ? "Username is Required"
                           : fieldState.error.type ===
                             ("minLength" || "maxLength ")
-                          ? "Username must be between 4 and 16 characters"
+                          ? "Username must be between 6 and 16 characters"
                           : "Username can only use letters numbers and underscores")
                       }
                     />
@@ -151,7 +151,7 @@ function Signup() {
                       label="Email Address"
                       name="email"
                       autoComplete="email"
-                      error={fieldState.invalid ? true : false}
+                      error={fieldState.invalid}
                       helperText={
                         fieldState.error &&
                         (fieldState.error.type === "required"
@@ -184,7 +184,7 @@ function Signup() {
                       type="password"
                       id="password"
                       autoComplete="new-password"
-                      error={fieldState.invalid ? true : false}
+                      error={fieldState.invalid}
                       helperText={
                         fieldState.error &&
                         (fieldState.error.type === "required"
@@ -206,7 +206,7 @@ function Signup() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="login" variant="body2">
+                <Link href="/i/flow/login" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
