@@ -17,6 +17,8 @@ import {
   Link,
 } from "@mui/material";
 
+import { useNavigate } from "react-router-dom";
+
 interface IFormInput {
   username: string;
   password: string;
@@ -40,6 +42,8 @@ function Login() {
     formState: { errors },
   } = useForm<IFormInput>({ mode: "onChange" });
 
+  const navagate = useNavigate();
+
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, {
       method: "POST",
@@ -52,7 +56,7 @@ function Login() {
       .then(handleResponse)
       .then((data) => {
         console.log(data.message);
-        window.location.href = "/" + data.username;
+        navagate("/" + data.username);
       })
       .catch((err) => {
         alert(err.error);
