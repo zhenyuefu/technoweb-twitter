@@ -60,7 +60,7 @@ function Login() {
         // 延迟5秒重定向到首页
         setTimeout(() => {
           navagate("/" + data.username);
-        }, 5000);
+        }, 3000);
       })
       .catch((err) => {
         alert(err.error);
