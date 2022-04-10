@@ -9,6 +9,8 @@ import middleware from "./middleware";
 // 注册中间件
 middleware(app);
 
-app.listen(8000, () => {
-  console.log(`http://localhost:8000`);
-});
+// app.listen(8000, () => {
+//   console.log(`http://localhost:8000`);
+// });
+
+module.exports = app;
