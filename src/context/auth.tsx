@@ -6,7 +6,7 @@ interface IAuth {
   username: string;
 }
 
-const info = await fetch("http://localhost:8000/api/auth", {
+const info = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth`, {
   credentials: "include",
 })
   .then((res) => {

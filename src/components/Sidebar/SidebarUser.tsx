@@ -8,7 +8,7 @@ type Props = {
 };
 
 function SidebarUser({ username }: Props) {
-  const { data, error } = useSWR(`/api/users/${username}`);
+  const { data, error } = useSWR(`/api/user/${username}`);
   const breakpoint = 768;
   const { width } = useViewport();
 
