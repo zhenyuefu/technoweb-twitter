@@ -15,6 +15,10 @@ const info = await fetch("http://localhost:8000/api/auth", {
   .then((data) => {
     console.log(data);
     return data;
+  })
+  .catch((err) => {
+    console.log(err);
+    return { isAuth: false };
   });
 
 const authAtom: RecoilState<IAuth> = atom({
