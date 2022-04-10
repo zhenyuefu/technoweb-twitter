@@ -57,7 +57,10 @@ function Login() {
       .then(handleResponse)
       .then((data) => {
         console.log(data.message);
-        navagate("/" + data.username);
+        // 延迟5秒重定向到首页
+        setTimeout(() => {
+          navagate("/" + data.username);
+        }, 5000);
       })
       .catch((err) => {
         alert(err.error);
