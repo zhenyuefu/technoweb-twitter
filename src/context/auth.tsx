@@ -6,7 +6,7 @@ interface IAuth {
   username: string;
 }
 
-const info = fetch("http://localhost:8000/api/auth", {
+const info = fetch("/api/auth", {
   credentials: "include",
 }).then((res) => {
   return res.json();
