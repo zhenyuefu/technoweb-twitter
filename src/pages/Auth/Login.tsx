@@ -52,6 +52,7 @@ function Login() {
       },
       body: JSON.stringify(data),
       credentials: "include",
+      mode: "cors",
     })
       .then(handleResponse)
       .then((data) => {

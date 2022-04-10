@@ -8,6 +8,7 @@ interface IAuth {
 
 const info = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth`, {
   credentials: "include",
+  mode: "cors",
 })
   .then((res) => {
     return res.json();

@@ -33,6 +33,7 @@ function Signup() {
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     fetch(`${import.meta.env.VITE_API_BASE_URL}/api/user`, {
       method: "POST",
+      mode: "cors",
       headers: {
         "Content-Type": "application/json",
       },
