@@ -3,7 +3,7 @@
     
     "composite": true,                                /* Enable constraints that allow a TypeScript project to be used with project references. */
     /* Language and Environment */
-    "target": "es2022",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    "target": "esnext",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
 
     /* Modules */
     "module": "CommonJS",                                /* Specify what module code is generated. */
@@ -15,7 +15,11 @@
     /* Type Checking */
     "strict": true,                                      /* Enable all strict type-checking options. */
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
-  },                                 
+  },    
+  "typeRoots": [
+    "node_modules/@types",
+    "./src/types"
+  ],                             
   "include": [
     "src/**/*.ts"
   ],

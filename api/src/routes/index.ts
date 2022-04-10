@@ -1,12 +1,10 @@
-import express from "express";
-import userRouter = require("./users");
-import loginRouter = require("./login");
-// const chatRouter = require("./chat");
-// const testRouter = require("./test");
+import express = require("express");
+import userRouter from "./user";
+import authRouter from "./auth";
 
 const routes: (app: express.Application) => void = (app) => {
-  app.use("/api/login", loginRouter);
   app.use("/api/user", userRouter);
+  app.use("/api/auth", authRouter);
 };
 
 export = routes;

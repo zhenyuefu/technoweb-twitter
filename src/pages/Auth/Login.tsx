@@ -29,7 +29,21 @@ function Login() {
     formState: { errors },
   } = useForm<IFormInput>({ mode: "onChange" });
 
-  const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<IFormInput> = (data) => {
+    fetch("/api/user/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          window.location.href = "/";
+        }
+      });
+  };
   console.log(errors);
 
   return (
