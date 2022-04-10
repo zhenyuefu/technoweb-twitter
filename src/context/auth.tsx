@@ -6,7 +6,7 @@ interface IAuth {
   username: string;
 }
 
-const info = fetch("/api/auth", {
+const info = fetch(`${process.env.API_BASE_URL}/api/auth`, {
   credentials: "include",
 }).then((res) => {
   return res.json();
