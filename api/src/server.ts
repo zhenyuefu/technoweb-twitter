@@ -9,8 +9,8 @@ import middleware from "./middleware";
 // 注册中间件
 middleware(app);
 
-app.listen(443, () => {
-  console.log(`http://localhost:443`);
-});
+// app.listen(443, () => {
+//   console.log(`http://localhost:443`);
+// });
 
-// module.exports = app;
+module.exports = app;
