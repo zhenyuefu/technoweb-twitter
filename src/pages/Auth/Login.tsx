@@ -18,6 +18,8 @@ import {
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
+import { authAtom } from "../../context/auth";
+import { useRecoilState } from "recoil";
 
 interface IFormInput {
   username: string;
@@ -43,6 +45,7 @@ function Login() {
   } = useForm<IFormInput>({ mode: "onChange" });
 
   const navagate = useNavigate();
+  const [auth, setauth] = useRecoilState(authAtom);
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, {
@@ -55,12 +58,31 @@ function Login() {
       mode: "cors",
     })
       .then(handleResponse)
-      .then((data) => {
+      .then(async (data) => {
         console.log(data.message);
-        // 延迟5秒重定向到首页
-        setTimeout(() => {
-          navagate("/" + data.username);
-        }, 3000);
+        const info = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}/api/auth`,
+          {
+            credentials: "include",
+            mode: "cors",
+          }
+        )
+          .then((res) => {
+            return res.json();
+          })
+          .then((data) => {
+            return data;
+          })
+          .catch((err) => {
+            console.log(err);
+            return { isAuth: false };
+          });
+        setauth({
+          isAuth: info.auth,
+          id: info.id || "",
+          username: info.username || "",
+        });
+        navagate("/" + info.username);
       })
       .catch((err) => {
         alert(err.error);
