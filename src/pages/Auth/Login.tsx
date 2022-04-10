@@ -41,7 +41,7 @@ function Login() {
   } = useForm<IFormInput>({ mode: "onChange" });
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    fetch(`${process.env.API_BASE_URL}/api/auth/login`, {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

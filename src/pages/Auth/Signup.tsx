@@ -31,7 +31,7 @@ function Signup() {
   } = useForm<IFormInput>({ mode: "onChange" });
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    fetch(`${process.env.API_BASE_URL}/api/user`, {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/user`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
