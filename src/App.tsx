@@ -5,9 +5,9 @@ import { useRecoilValue } from "recoil";
 import Feed from "./components/Feed/Feed";
 import Profile from "./components/Profile/Profile";
 
-const Login = React.lazy(() => import("./pages/Auth/Login"));
-const Signup = React.lazy(() => import("./pages/Auth/Signup"));
-const Home = React.lazy(() => import("./pages/Home"));
+import Login from "./pages/Auth/Login";
+import Signup from "./pages/Auth/Signup";
+import Home from "./pages/Home";
 import { authAtom } from "./context/auth";
 
 function App() {
