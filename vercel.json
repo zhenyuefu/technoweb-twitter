@@ -4,20 +4,14 @@
     },
     "builds": [
       {
-        "src": "api/build/index.js",
-        "use": "@vercel/node",
-        "config": { "includeFiles": ["api/build/**"] }
-      },
-      {
-        "src": "dist/**",
-        "use": "@vercel/static",
-        "config": { "includeFiles": ["dist/**"] }
+        "src": "api/server.ts",
+        "use": "@vercel/node"
       }
     ],
     "routes": [
       {
         "src": "/(.*)",
-        "dest": "/"
+        "dest": "api/server.ts"
       }
     ]
   }
