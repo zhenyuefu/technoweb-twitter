@@ -4,9 +4,10 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import Feed from "./components/Feed/Feed";
 import Profile from "./components/Profile/Profile";
-import Login from "./pages/Auth/Login";
-import Signup from "./pages/Auth/Signup";
-import Home from "./pages/Home";
+
+const Login = React.lazy(() => import("./pages/Auth/Login"));
+const Signup = React.lazy(() => import("./pages/Auth/Signup"));
+const Home = React.lazy(() => import("./pages/Home"));
 import { authAtom } from "./context/auth";
 
 function App() {
@@ -38,7 +39,8 @@ type RequiredAuthProps = {
 
 function RequiredAuth({ children, redirectTo }: RequiredAuthProps) {
   const auth = useRecoilValue(authAtom);
-  return auth ? children : <Navigate to={redirectTo} />;
+  console.log(auth);
+  return auth.isAuth ? children : <Navigate to={redirectTo} />;
 }
 
 export default App;

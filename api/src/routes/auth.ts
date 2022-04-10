@@ -30,15 +30,12 @@ passport.use(
 
 passport.serializeUser((user, cb) => {
   console.log("serializeUser", user);
-  process.nextTick(function () {
-    cb(null, user.id);
-  });
+  cb(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await User.findById(id).exec();
-
     if (!user) {
       return done(null, false);
     }
@@ -48,19 +45,65 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-router.post(
-  "/login",
-  passport.authenticate("local", {
-    failureMessage: true,
-  }),
-  (req, res) => {
-    res.redirect("/" + req.user?.username);
+router.get("/", (req, res) => {
+  if (req.isAuthenticated()) {
+    return res.send({
+      auth: true,
+      id: req.user.id,
+      username: req.user.username,
+    });
   }
-);
+  return res.send({ auth: false });
+});
 
-router.post("/logout", async (req, res) => {
+router.post("/login", (req, res, next) => {
+  if (req.body.remember) {
+    // cookies 有效期7天
+    req.session.cookie.maxAge = 7 * 24 * 3600 * 1000;
+  }
+
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.status(401).json({ error: info.message });
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        return next(err);
+      }
+      return res.status(200).json({
+        message: "Login successful",
+        uid: user.id,
+        username: user.username,
+      });
+    });
+  })(req, res, next);
+});
+
+// (req, res, next) => {
+//   req.session.save((err) => {
+//     if (err) {
+//       return next(err);
+//     }
+
+//     res.send({
+//       message: "Login successful",
+//       user: req.user,
+//     });
+//   });
+// }
+// );
+
+router.post("/logout", async (req, res, next) => {
   req.logout();
-  res.redirect("/i/flow/login");
+  req.session.save((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.send({ message: "Logout successful" });
+  });
 });
 
 // async (req, res) => {

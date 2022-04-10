@@ -18,8 +18,19 @@ import {
 } from "@mui/material";
 
 interface IFormInput {
-  email: string;
+  username: string;
   password: string;
+  remember: boolean;
+}
+
+function handleResponse(response: Response) {
+  return response.json().then((json) => {
+    if (response.ok) {
+      return json;
+    } else {
+      return Promise.reject(json);
+    }
+  });
 }
 
 function Login() {
@@ -30,18 +41,21 @@ function Login() {
   } = useForm<IFormInput>({ mode: "onChange" });
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    fetch("/api/user/login", {
+    fetch("http://localhost:8000/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
+      credentials: "include",
     })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.success) {
-          window.location.href = "/";
-        }
+      .then(handleResponse)
+      .then((data) => {
+        console.log(data.message);
+        window.location.href = "/" + data.username;
+      })
+      .catch((err) => {
+        alert(err.error);
       });
   };
   console.log(errors);
@@ -70,20 +84,20 @@ function Login() {
           sx={{ mt: 1 }}
         >
           <Controller
-            name="email"
+            name="username"
             control={control}
             defaultValue=""
             rules={{ required: true }}
-            render={({ field, fieldState }) => (
+            render={({ field }) => (
               <TextField
                 {...field}
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
                 autoFocus
               />
             )}
@@ -93,7 +107,7 @@ function Login() {
             control={control}
             defaultValue=""
             rules={{ required: true }}
-            render={({ field, fieldState }) => (
+            render={({ field }) => (
               <TextField
                 {...field}
                 margin="normal"
@@ -107,10 +121,21 @@ function Login() {
               />
             )}
           />
-          <FormControlLabel
+          <Controller
+            name="remember"
+            control={control}
+            defaultValue={false}
+            render={({ field }) => (
+              <FormControlLabel
+                control={<Checkbox {...field} value="remember" />}
+                label="Remember me"
+              />
+            )}
+          />
+          {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
-          />
+          /> */}
           <Button
             type="submit"
             fullWidth

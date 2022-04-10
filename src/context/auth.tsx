@@ -1,14 +1,26 @@
 import { atom, RecoilState } from "recoil";
 
 interface IAuth {
+  isAuth: boolean;
+  id: string;
   username: string;
-  email: string;
-  token: string;
 }
+
+const info = fetch("http://localhost:8000/api/auth", {
+  credentials: "include",
+}).then((res) => {
+  return res.json();
+});
 
 const authAtom: RecoilState<IAuth> = atom({
   key: "auth",
-  default: JSON.parse(localStorage.getItem("auth") || "null"),
+  default: info.then((data) => {
+    return {
+      isAuth: data.isAuth,
+      id: data.id,
+      username: data.username,
+    };
+  }),
 });
 
 export { authAtom };
