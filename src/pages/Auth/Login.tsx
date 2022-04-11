@@ -2,7 +2,7 @@ import React from "react";
 
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { useForm, SubmitHandler, Controller, get } from "react-hook-form";
 import {
   Container,
   CssBaseline,
@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
-import { authAtom } from "../../context/auth";
+import { authAtom, getAuth } from "../../context/auth";
 import { useRecoilState } from "recoil";
 
 interface IFormInput {
@@ -45,7 +45,7 @@ function Login() {
   } = useForm<IFormInput>({ mode: "onChange" });
 
   const navagate = useNavigate();
-  const [auth, setauth] = useRecoilState(authAtom);
+  const [auth, setAuth] = useRecoilState(authAtom);
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, {
@@ -60,29 +60,12 @@ function Login() {
       .then(handleResponse)
       .then(async (data) => {
         console.log(data.message);
-        const info = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/api/auth`,
-          {
-            credentials: "include",
-            mode: "cors",
-          }
-        )
-          .then((res) => {
-            return res.json();
-          })
-          .then((data) => {
-            return data;
-          })
-          .catch((err) => {
-            console.log(err);
-            return { isAuth: false };
-          });
-        setauth({
-          isAuth: info.auth,
-          id: info.id || "",
-          username: info.username || "",
+        getAuth().then((user) => {
+          console.log(user);
+          setAuth(user);
+          navagate("/home");
         });
-        navagate("/" + info.username);
+        // navagate("/home");
       })
       .catch((err) => {
         alert(err.error);

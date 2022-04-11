@@ -9,21 +9,53 @@ import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import SidebarOption from "./SidebarOption";
 import { Button, IconButton, SvgIcon } from "@mui/material";
 import { useViewport } from "../../context/viewportContext";
-import { NavLink } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { authAtom } from "../../context/auth";
+import { useNavigate, NavLink } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { authAtom, getAuth } from "../../context/auth";
 import SidebarUser from "./SidebarUser";
+import UserPopover from "./UserPopover";
 
 const navlinkStyle = {
   textDecoration: "none",
   color: "black",
 };
 
+function handleResponse(response: Response) {
+  return response.json().then((json) => {
+    if (response.ok) {
+      return json;
+    } else {
+      return Promise.reject(json);
+    }
+  });
+}
+
 function Sidebar() {
   const breakpoint = 768;
   const { width } = useViewport();
-  const auth = useRecoilValue(authAtom);
-  const username = auth.username;
+  const [auth, setAuth] = useRecoilState(authAtom);
+  const navigate = useNavigate();
+  const username = auth.username || "";
+
+  const handleLogout = () => {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/logout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      mode: "cors",
+    })
+      .then(handleResponse)
+      .then(async (data) => {
+        console.log(data.message);
+        getAuth().then((user) => {
+          console.log(user);
+          setAuth(user);
+          navigate("/");
+        });
+      });
+  };
 
   return (
     <div className="sidebar">
@@ -54,6 +86,8 @@ function Sidebar() {
         </Button>
       )}
 
+      <UserPopover />
+      <Button onClick={handleLogout}>logout temp</Button>
       <SidebarUser username={username}></SidebarUser>
     </div>
   );
