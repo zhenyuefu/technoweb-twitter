@@ -2,35 +2,40 @@ import React, { Suspense } from "react";
 
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import Feed from "./components/Feed/Feed";
-import Profile from "./components/Profile/Profile";
 
-import Login from "./pages/Auth/Login";
-import Signup from "./pages/Auth/Signup";
-import Home from "./pages/Home";
+// import Feed from "./components/Feed/Feed";
+const Feed = React.lazy(() => import("./components/Feed/Feed"));
+// import Profile from "./components/Profile/Profile";
+const Profile = React.lazy(() => import("./components/Profile/Profile"));
+// import Login from "./pages/Auth/Login";
+const Login = React.lazy(() => import("./pages/Auth/Login"));
+// import Signup from "./pages/Auth/Signup";
+const Signup = React.lazy(() => import("./pages/Auth/Signup"));
+// import Home from "./pages/Home";
+const Home = React.lazy(() => import("./pages/Home"));
 import { authAtom } from "./context/auth";
 import { LoadingPage } from "./components/Loading/LoadingPage";
 
 function App() {
   return (
     <div className="app">
-      <Routes>
-        <Route
-          path="/*"
-          element={
-            <Suspense fallback={<LoadingPage />}>
+      <Suspense fallback={<LoadingPage />}>
+        <Routes>
+          <Route
+            path="/*"
+            element={
               <RequiredAuth redirectTo="/i/flow/login">
                 <Home />
               </RequiredAuth>
-            </Suspense>
-          }
-        >
-          <Route path="home" element={<Feed />} />
-          <Route path=":username" element={<Profile />} />
-        </Route>
-        <Route path="/i/flow/login" element={<Login />} />
-        <Route path="/i/flow/signup" element={<Signup />} />
-      </Routes>
+            }
+          >
+            <Route path="home" element={<Feed />} />
+            <Route path=":username" element={<Profile />} />
+          </Route>
+          <Route path="/i/flow/login" element={<Login />} />
+          <Route path="/i/flow/signup" element={<Signup />} />
+        </Routes>
+      </Suspense>
     </div>
   );
 }
