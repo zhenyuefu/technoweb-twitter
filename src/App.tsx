@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useRecoilValue } from "recoil";
@@ -17,9 +17,11 @@ function App() {
         <Route
           path="/*"
           element={
-            <RequiredAuth redirectTo="/i/flow/login">
-              <Home />
-            </RequiredAuth>
+            <Suspense fallback={<div>Loading...</div>}>
+              <RequiredAuth redirectTo="/i/flow/login">
+                <Home />
+              </RequiredAuth>
+            </Suspense>
           }
         >
           <Route path="home" element={<Feed />} />
