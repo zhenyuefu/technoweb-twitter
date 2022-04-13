@@ -1,10 +1,11 @@
+import React from "react";
+
 import { IconButton, ImageList, ImageListItem } from "@mui/material";
-import ReactZmage from "react-zmage";
 import { ClearRounded } from "@mui/icons-material";
 
 type Props = {
   img_list: Array<string>;
-  handleDelete: Function;
+  handleDelete: (index: number) => void;
 };
 
 const ImgBox = (props: Props) => {
@@ -12,10 +13,7 @@ const ImgBox = (props: Props) => {
     <div className="imgBox">
       <ImageList sx={{ maxWidth: "650px" }} cols={2} rowHeight={150}>
         {props.img_list.map((item, index) => (
-          <ImageListItem
-            key={index}
-            onClick={() => ReactZmage.browsing({ src: item })}
-          >
+          <ImageListItem key={index}>
             <IconButton
               sx={{
                 position: "absolute",

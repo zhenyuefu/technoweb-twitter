@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
-import { useForm, SubmitHandler, Controller, get } from "react-hook-form";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import {
   Container,
   CssBaseline,
@@ -12,66 +12,64 @@ import {
   TextField,
   FormControlLabel,
   Checkbox,
-  Button,
   Grid,
   Link,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
-import { authAtom, getAuth } from "../../context/auth";
-import { useRecoilState } from "recoil";
-
-interface IFormInput {
-  username: string;
-  password: string;
-  remember: boolean;
-}
-
-function handleResponse(response: Response) {
-  return response.json().then((json) => {
-    if (response.ok) {
-      return json;
-    } else {
-      return Promise.reject(json);
-    }
-  });
-}
+import { authAtom } from "../../context/auth";
+import { useSetRecoilState } from "recoil";
+import { login } from "../../utils/auth";
+import { IFormLogin, ISnackbarState } from "../../types";
+import { LoadingButton } from "@mui/lab";
 
 function Login() {
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<IFormInput>({ mode: "onChange" });
+  const { handleSubmit, control } = useForm<IFormLogin>();
 
   const navagate = useNavigate();
-  const [auth, setAuth] = useRecoilState(authAtom);
+  const setAuth = useSetRecoilState(authAtom);
+  const [snackBarState, setSnackBarState] = useState<ISnackbarState>({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = snackBarState;
+  const [serverity, setServerity] = useState<"success" | "error">("success");
+  const [infoMessage, setInfoMessage] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
 
-  const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-      credentials: "include",
-      mode: "cors",
-    })
-      .then(handleResponse)
-      .then(async (data) => {
-        console.log(data.message);
-        getAuth().then((user) => {
-          console.log(user);
-          setAuth(user);
-          navagate("/home");
-        });
-        // navagate("/home");
-      })
-      .catch((err) => {
-        alert(err.error);
-      });
+  const handleOpen = () => {
+    setSnackBarState({ ...snackBarState, open: true });
   };
-  console.log(errors);
+
+  const handleClose = () => {
+    setSnackBarState({ ...snackBarState, open: false });
+  };
+
+  const onSubmit: SubmitHandler<IFormLogin> = async (data) => {
+    try {
+      setIsFetching(true);
+      const res = await login(data);
+      setServerity("success");
+      setInfoMessage(res.message);
+      handleOpen();
+      setAuth({
+        auth: true,
+        uid: res.uid,
+        username: res.username,
+      });
+      navagate("/home");
+    } catch (err: any) {
+      // console.log(err);
+      setIsFetching(false);
+      setServerity("error");
+      setInfoMessage(err.message);
+      handleOpen();
+    }
+  };
+  // console.log(errors);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -145,18 +143,15 @@ function Login() {
               />
             )}
           />
-          {/* <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          /> */}
-          <Button
+          <LoadingButton
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            loading={isFetching}
           >
             Sign In
-          </Button>
+          </LoadingButton>
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
@@ -171,6 +166,21 @@ function Login() {
           </Grid>
         </Box>
       </Box>
+
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={open}
+        onClose={handleClose}
+        key={vertical + horizontal}
+      >
+        <Alert
+          onClose={handleClose}
+          severity={serverity}
+          sx={{ width: "100%" }}
+        >
+          {infoMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }

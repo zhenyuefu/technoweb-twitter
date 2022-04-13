@@ -4,17 +4,15 @@ import React, { useState } from "react";
 import "../../style/TweetBox.css";
 import ImgBox from "./ImgBox";
 
-type Props = {};
-
-function TweetBox({}: Props) {
+function TweetBox() {
   const [imgList, setImgList] = useState<Array<string>>([]);
 
   const handleAddImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
       return;
     }
-    let img = e.target.files[0];
-    let reader = new FileReader();
+    const img = e.target.files[0];
+    const reader = new FileReader();
     reader.onload = () => {
       setImgList([...imgList, reader.result as string]);
       e.target.value = "";

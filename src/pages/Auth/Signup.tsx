@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
 
@@ -10,43 +10,89 @@ import {
   Typography,
   Grid,
   TextField,
-  Button,
   Link,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-
-interface IFormInput {
-  email: string;
-  username: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-}
+import { existEmail, existUsername, register } from "../../utils/auth";
+import { IFormRegister, ISnackbarState } from "../../types";
+import { useSetRecoilState } from "recoil";
+import { authAtom } from "../../context/auth";
+import { useNavigate } from "react-router-dom";
+import { LoadingButton } from "@mui/lab";
+import { sleep } from "../../utils/utils";
 
 function Signup() {
   const {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<IFormInput>({ mode: "onChange" });
+  } = useForm<IFormRegister>({ mode: "onChange" });
+  const [isFetching, setIsFetching] = React.useState(false);
+  const [snackBarState, setSnackBarState] = useState<ISnackbarState>({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = snackBarState;
+  const [serverity, setServerity] = useState<"success" | "error">("success");
+  const [infoMessage, setInfoMessage] = useState("");
+  const [usernameExist, setUsernameExist] = useState(false);
+  const [emailExist, setEmailExist] = useState(false);
+  const setAuth = useSetRecoilState(authAtom);
+  const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/user`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.success) {
-          window.location.href = "/";
-        }
-      });
+  const handleOpen = () => {
+    setSnackBarState({ ...snackBarState, open: true });
   };
-  console.log(errors);
+
+  const handleClose = () => {
+    setSnackBarState({ ...snackBarState, open: false });
+  };
+
+  async function onUsernameBlur(name: string) {
+    try {
+      await existUsername(name);
+      setUsernameExist(true);
+    } catch (e) {
+      setUsernameExist(false);
+    }
+  }
+
+  async function onEmailBlur(email: string) {
+    try {
+      await existEmail(email);
+      setEmailExist(true);
+    } catch (e) {
+      setEmailExist(false);
+    }
+  }
+
+  const onSubmit: SubmitHandler<IFormRegister> = async (data) => {
+    try {
+      setIsFetching(true);
+      const res = await register(data);
+      setAuth({
+        auth: true,
+        username: res.user.username,
+        uid: String(res.user._id),
+      });
+      setServerity("success");
+      setInfoMessage(res.message + " Redirecting...");
+      handleOpen();
+      await sleep(2000);
+      navigate("/home");
+    } catch (err: any) {
+      // console.log(err);
+      setServerity("error");
+      setInfoMessage(err.message);
+      handleOpen();
+      setIsFetching(false);
+    }
+  };
+
+  // console.log(errors);
 
   return (
     <div>
@@ -133,15 +179,25 @@ function Signup() {
                       type="username"
                       id="username"
                       autoComplete="username"
-                      error={fieldState.invalid}
+                      color={
+                        fieldState.isDirty && !usernameExist
+                          ? "success"
+                          : "primary"
+                      }
+                      error={
+                        fieldState.invalid ||
+                        (usernameExist && fieldState.isDirty)
+                      }
+                      onBlur={() => onUsernameBlur(field.value)}
                       helperText={
-                        fieldState.error &&
-                        (fieldState.error.type === "required"
-                          ? "Username is Required"
-                          : fieldState.error.type ===
-                            ("minLength" || "maxLength ")
-                          ? "Username must be between 6 and 16 characters"
-                          : "Username can only use letters numbers and underscores")
+                        (fieldState.error &&
+                          (fieldState.error.type === "required"
+                            ? "Username is Required"
+                            : fieldState.error.type ===
+                              ("minLength" || "maxLength ")
+                            ? "Username must be between 6 and 16 characters"
+                            : "Username can only use letters numbers and underscores")) ||
+                        (usernameExist && "Username already exist")
                       }
                     />
                   )}
@@ -165,13 +221,22 @@ function Signup() {
                       id="email"
                       label="Email Address"
                       name="email"
+                      onBlur={() => onEmailBlur(field.value)}
                       autoComplete="email"
-                      error={fieldState.invalid}
+                      color={
+                        fieldState.isDirty && !emailExist
+                          ? "success"
+                          : "primary"
+                      }
+                      error={
+                        fieldState.invalid || (emailExist && fieldState.isDirty)
+                      }
                       helperText={
-                        fieldState.error &&
-                        (fieldState.error.type === "required"
-                          ? "Email is Required"
-                          : "This is not a valid email")
+                        (fieldState.error &&
+                          (fieldState.error.type === "required"
+                            ? "Email is Required"
+                            : "This is not a valid email")) ||
+                        (emailExist && "This email is already registered")
                       }
                     />
                   )}
@@ -211,14 +276,16 @@ function Signup() {
                 />
               </Grid>
             </Grid>
-            <Button
+            <LoadingButton
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              loading={isFetching}
+              disabled={Object.keys(errors).length !== 0 || usernameExist}
             >
               Sign Up
-            </Button>
+            </LoadingButton>
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href="/i/flow/login" variant="body2">
@@ -229,6 +296,20 @@ function Signup() {
           </Box>
         </Box>
       </Container>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={open}
+        onClose={handleClose}
+        key={vertical + horizontal}
+      >
+        <Alert
+          onClose={handleClose}
+          severity={serverity}
+          sx={{ width: "100%" }}
+        >
+          {infoMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

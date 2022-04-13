@@ -11,7 +11,7 @@ import { Button, IconButton, SvgIcon } from "@mui/material";
 import { useViewport } from "../../context/viewportContext";
 import { useNavigate, NavLink } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { authAtom, getAuth } from "../../context/auth";
+import { authAtom } from "../../context/auth";
 import SidebarUser from "./SidebarUser";
 import UserPopover from "./UserPopover";
 
@@ -47,13 +47,13 @@ function Sidebar() {
       mode: "cors",
     })
       .then(handleResponse)
-      .then(async (data) => {
-        console.log(data.message);
-        getAuth().then((user) => {
-          console.log(user);
-          setAuth(user);
-          navigate("/");
+      .then(() => {
+        setAuth({
+          auth: false,
+          uid: "",
+          username: "",
         });
+        navigate("/");
       });
   };
 
