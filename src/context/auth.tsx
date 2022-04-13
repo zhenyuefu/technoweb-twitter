@@ -25,7 +25,7 @@ async function getAuth() {
 
 const authAtom: RecoilState<IAuth> = atom({
   key: "auth",
-  default: await getAuth(),
+  default: getAuth(),
 });
 
 export { authAtom, getAuth };

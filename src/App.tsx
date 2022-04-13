@@ -9,6 +9,7 @@ import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
 import Home from "./pages/Home";
 import { authAtom } from "./context/auth";
+import { LoadingPage } from "./components/Loading/LoadingPage";
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
         <Route
           path="/*"
           element={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<LoadingPage />}>
               <RequiredAuth redirectTo="/i/flow/login">
                 <Home />
               </RequiredAuth>
