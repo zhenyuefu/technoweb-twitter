@@ -1,4 +1,5 @@
 import { atom, RecoilState } from "recoil";
+import { handleResponse } from "../utils/utils";
 
 interface IAuth {
   auth: boolean;
@@ -7,23 +8,19 @@ interface IAuth {
 }
 
 async function getAuth() {
-  const user = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/user`, {
-    credentials: "include",
-    mode: "cors",
-  })
-    .then((res) => {
-      // console.log(res);
-      return res.json();
-    })
-    .then((data) => {
-      console.log(data);
-      return data + { auth: true };
-    })
-    .catch((err) => {
-      console.log(err);
-      return { auth: false };
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/user`, {
+      credentials: "include",
+      mode: "cors",
     });
-  return user;
+    const data = await handleResponse(res);
+    data.auth = true;
+    // console.log(data);
+    return data;
+  } catch (err) {
+    console.log(err);
+    return { auth: false };
+  }
 }
 
 const authAtom: RecoilState<IAuth> = atom({

@@ -39,7 +39,6 @@ type RequiredAuthProps = {
 
 function RequiredAuth({ children, redirectTo }: RequiredAuthProps) {
   const auth = useRecoilValue(authAtom);
-  console.log(auth);
   return auth.auth ? children : <Navigate to={redirectTo} />;
 }
 

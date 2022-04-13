@@ -1,17 +1,5 @@
 import { IFormLogin, IFormRegister } from "../types";
-
-function handleResponse(response: Response) {
-  return response.json().then((json) => {
-    if (response.ok) {
-      return json;
-    } else {
-      return Promise.reject({
-        message: json.message,
-        status: response.status,
-      });
-    }
-  });
-}
+import { handleResponse } from "./utils";
 
 export async function login(data: IFormLogin) {
   const res = await fetch(
