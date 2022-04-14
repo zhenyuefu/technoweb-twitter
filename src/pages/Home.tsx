@@ -1,17 +1,21 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar/Sidebar";
+import { useViewport } from "../context/viewportContext";
 
 import "../style/Home.css";
 
-type Props = {};
+function Home() {
+  const { width } = useViewport();
+  const breakpoint = 768;
 
-function Home({}: Props) {
   return (
     <div className="home">
       <Sidebar />
       <Outlet />
-      <div style={{ display: "flex", width: "100%", flex: 0.6 }}></div>
+      {width > breakpoint && (
+        <div style={{ display: "flex", width: "100%", flex: 0.6 }}></div>
+      )}
     </div>
   );
 }

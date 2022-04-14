@@ -4,10 +4,13 @@
   width: 100%;
   border-bottom: 1px solid var(--twitter-border-color);
   padding-bottom: 10px;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .post__avatar {
-  padding: 10px;
+  padding-top: 4px;
+  margin-right: 12px;
 }
 
 .post__header > span {

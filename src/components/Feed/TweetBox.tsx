@@ -26,10 +26,10 @@ function TweetBox() {
 
   return (
     <div className="tweetbox">
+      <div style={{ paddingTop: "4px", marginRight: "12px" }}>
+        <Avatar />
+      </div>
       <div className="tweetbox__input">
-        <div>
-          <Avatar />
-        </div>
         <TextField
           placeholder="What's happening?"
           type="text"
@@ -39,28 +39,29 @@ function TweetBox() {
           fullWidth
           InputProps={{ disableUnderline: true }}
         />
-      </div>
-      {imgList.length > 0 && (
-        <ImgBox img_list={imgList} handleDelete={handleDeleteImage} />
-      )}
-      <div className="tweetbox__buttons">
-        <label htmlFor="icon-button-file">
-          <input
-            hidden
-            accept="image/*"
-            id="icon-button-file"
-            type="file"
-            onChange={handleAddImage}
-          />
-          <IconButton
-            color="primary"
-            aria-label="upload picture"
-            component="span"
-          >
-            <PhotoCamera />
-          </IconButton>
-        </label>
-        <Button className="tweetbox__tweetbutton">Tweet</Button>
+
+        {imgList.length > 0 && (
+          <ImgBox img_list={imgList} handleDelete={handleDeleteImage} />
+        )}
+        <div className="tweetbox__buttons">
+          <label htmlFor="icon-button-file">
+            <input
+              hidden
+              accept="image/*"
+              id="icon-button-file"
+              type="file"
+              onChange={handleAddImage}
+            />
+            <IconButton
+              color="primary"
+              aria-label="upload picture"
+              component="span"
+            >
+              <PhotoCamera />
+            </IconButton>
+          </label>
+          <Button className="tweetbox__tweetbutton">Tweet</Button>
+        </div>
       </div>
     </div>
   );

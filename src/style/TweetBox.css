@@ -1,22 +1,20 @@
 .tweetbox {
-  padding-bottom: 10px;
+  padding-left: 16px;
   border-bottom: 1px solid var(--twitter-border-color);
-  padding-right: 10px;
-}
-
-.tweetbox > form {
+  padding-right: 16px;
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
 }
 
 .tweetbox__input {
   display: flex;
-  padding: 20px;
+  flex-direction: column;
+  width: 100%;
+  padding: 10px;
 }
 
 .tweetbox__input > .MuiTextField-root {
   flex: 1;
-  margin-left: 20px;
   font-size: 20px;
   border: none;
   outline: none;
@@ -36,7 +34,12 @@
   font-weight: 900 !important;
   border-radius: 9999px !important;
   height: 40px !important;
-  margin-top: 20px !important;
   width: 80px;
-  margin-left: auto !important;
+}
+
+.tweetbox__buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* margin-top: 20px; */
 }
