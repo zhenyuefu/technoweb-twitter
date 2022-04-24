@@ -1,12 +1,14 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
 import "./style/index.css";
 import App from "./App";
 import ViewportProvider from "./context/viewportContext";
 import { BrowserRouter } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 
-ReactDOM.render(
+import { createRoot } from 'react-dom/client';
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(
   // <React.StrictMode>
   <ViewportProvider>
     <RecoilRoot>
@@ -14,7 +16,6 @@ ReactDOM.render(
         <App />
       </BrowserRouter>
     </RecoilRoot>
-  </ViewportProvider>,
-  // </React.StrictMode>,
-  document.getElementById("root")
+  </ViewportProvider>
+  // </React.StrictMode>
 );

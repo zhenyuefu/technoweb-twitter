@@ -28,7 +28,7 @@ import { LoadingButton } from "@mui/lab";
 function Login() {
   const { handleSubmit, control } = useForm<IFormLogin>();
 
-  const navagate = useNavigate();
+  const navigate = useNavigate();
   const setAuth = useSetRecoilState(authAtom);
   const [snackBarState, setSnackBarState] = useState<ISnackbarState>({
     open: false,
@@ -36,7 +36,7 @@ function Login() {
     horizontal: "center",
   });
   const { vertical, horizontal, open } = snackBarState;
-  const [serverity, setServerity] = useState<"success" | "error">("success");
+  const [severity, setSeverity] = useState<"success" | "error">("success");
   const [infoMessage, setInfoMessage] = useState("");
   const [isFetching, setIsFetching] = useState(false);
 
@@ -52,7 +52,7 @@ function Login() {
     try {
       setIsFetching(true);
       const res = await login(data);
-      setServerity("success");
+      setSeverity("success");
       setInfoMessage(res.message);
       handleOpen();
       setAuth({
@@ -60,11 +60,11 @@ function Login() {
         uid: res.uid,
         username: res.username,
       });
-      navagate("/home");
+      navigate("/home");
     } catch (err: any) {
       // console.log(err);
       setIsFetching(false);
-      setServerity("error");
+      setSeverity("error");
       setInfoMessage(err.message);
       handleOpen();
     }
@@ -175,7 +175,7 @@ function Login() {
       >
         <Alert
           onClose={handleClose}
-          severity={serverity}
+          severity={severity}
           sx={{ width: "100%" }}
         >
           {infoMessage}

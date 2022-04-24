@@ -36,7 +36,7 @@ function Signup() {
     horizontal: "center",
   });
   const { vertical, horizontal, open } = snackBarState;
-  const [serverity, setServerity] = useState<"success" | "error">("success");
+  const [severity, setSeverity] = useState<"success" | "error">("success");
   const [infoMessage, setInfoMessage] = useState("");
   const [usernameExist, setUsernameExist] = useState(false);
   const [emailExist, setEmailExist] = useState(false);
@@ -75,17 +75,18 @@ function Signup() {
       const res = await register(data);
       setAuth({
         auth: true,
-        username: res.user.username,
-        uid: String(res.user._id),
+        username: res.username,
+        uid: String(res.uid),
       });
-      setServerity("success");
+      setSeverity("success");
       setInfoMessage(res.message + " Redirecting...");
       handleOpen();
       await sleep(2000);
       navigate("/home");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       // console.log(err);
-      setServerity("error");
+      setSeverity("error");
       setInfoMessage(err.message);
       handleOpen();
       setIsFetching(false);
@@ -166,7 +167,7 @@ function Signup() {
                     required: true,
                     minLength: 6,
                     maxLength: 16,
-                    pattern: /^[a-zA-Z0-9_-]{6,16}$/i,
+                    pattern: /^[a-zA-Z\d_-]{6,16}$/i,
                   }}
                   defaultValue=""
                   render={({ field, fieldState }) => (
@@ -210,7 +211,7 @@ function Signup() {
                   rules={{
                     required: true,
                     pattern:
-                      /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/i,
+                      /^[a-zA-Z\d_-]+@[a-zA-Z\d_-]+(\.[a-zA-Z\d_-]+)+$/i,
                   }}
                   defaultValue=""
                   render={({ field, fieldState }) => (
@@ -251,7 +252,7 @@ function Signup() {
                     minLength: 8,
                     maxLength: 16,
                     pattern:
-                      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9~!@#$%^&*]{8,16}$/i,
+                      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d~!@#$%^&*]{8,16}$/i,
                   }}
                   defaultValue=""
                   render={({ field, fieldState }) => (
@@ -304,7 +305,7 @@ function Signup() {
       >
         <Alert
           onClose={handleClose}
-          severity={serverity}
+          severity={severity}
           sx={{ width: "100%" }}
         >
           {infoMessage}
