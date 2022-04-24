@@ -10,7 +10,11 @@ const viewportContext = React.createContext<IViewPort>({
   height: window.innerHeight,
 });
 
-const ViewportProvider: React.FC<React.ReactNode> = ({ children }) => {
+type Props = {
+  children?: React.ReactNode;
+};
+
+function ViewportProvider({ children }: Props) {
   const [width, setWidth] = React.useState(window.innerWidth);
   const [height, setHeight] = React.useState(window.innerHeight);
 
@@ -29,7 +33,7 @@ const ViewportProvider: React.FC<React.ReactNode> = ({ children }) => {
       {children}
     </viewportContext.Provider>
   );
-};
+}
 
 const useViewport = () => {
   const { width, height } = React.useContext<IViewPort>(viewportContext);
