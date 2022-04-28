@@ -13,7 +13,7 @@ export interface IFormRegister {
 }
 
 export interface IFormLogin {
-  username: string;
+  email: string;
   password: string;
   remember: boolean;
 }
