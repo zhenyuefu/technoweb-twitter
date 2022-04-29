@@ -44,16 +44,11 @@ const ImgBox = (props: Props) => {
                 }}
               />
             </IconButton>
-            <img
+            <ReactZmage
               src={item}
               alt="img"
-              onClick={() =>
-                ReactZmage.browsing({
-                  src: item,
-                  defaultPage: index,
-                  set: img_set,
-                })
-              }
+              defaultPage={index}
+              set={img_set}
             />
           </ImageListItem>
         ))}
