@@ -2,7 +2,7 @@ import React from "react";
 
 import { IconButton, ImageList, ImageListItem } from "@mui/material";
 import { ClearRounded } from "@mui/icons-material";
-import ReactZmage from "react-zmage";
+import Zmage from "react-zmage";
 
 type Props = {
   img_list: Array<string>;
@@ -44,12 +44,7 @@ const ImgBox = (props: Props) => {
                 }}
               />
             </IconButton>
-            <ReactZmage
-              src={item}
-              alt="img"
-              defaultPage={index}
-              set={img_set}
-            />
+            <Zmage src={item} alt="img" defaultPage={index} set={img_set} />
           </ImageListItem>
         ))}
       </ImageList>
