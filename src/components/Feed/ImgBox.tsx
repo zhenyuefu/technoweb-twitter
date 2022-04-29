@@ -14,13 +14,6 @@ const ImgBox = (props: Props) => {
   props.img_list.map((img) => {
     img_set.push({ src: img, alt: "" });
   });
-  const openZmage = (img: string, index: number) => {
-    ReactZmage.browsing({
-      src: img,
-      defaultPage: index,
-      set: img_set,
-    });
-  };
 
   return (
     <div className="imgBox">
@@ -51,7 +44,17 @@ const ImgBox = (props: Props) => {
                 }}
               />
             </IconButton>
-            <img src={item} alt="img" onClick={() => openZmage(item, index)} />
+            <img
+              src={item}
+              alt="img"
+              onClick={() =>
+                ReactZmage.browsing({
+                  src: item,
+                  defaultPage: index,
+                  set: img_set,
+                })
+              }
+            />
           </ImageListItem>
         ))}
       </ImageList>
