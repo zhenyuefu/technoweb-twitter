@@ -2083,10 +2083,10 @@ react-transition-group@^4.4.2:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-zmage@0.8.5-beta.36:
-  version "0.8.5-beta.36"
-  resolved "https://registry.yarnpkg.com/react-zmage/-/react-zmage-0.8.5-beta.36.tgz#3dee3cf74c6b92901f40b7d6d4b047fefcf5cc03"
-  integrity sha512-iF0LxAXczbU7tTFOZwGe5eMBbGznLdNEmvyuTu51v7ub6K82RE2YiDGhlYO6SRS5ioFm3kWYC/SQYBRk2h6QSQ==
+react-zmage@0.8.5-beta.33:
+  version "0.8.5-beta.33"
+  resolved "https://registry.yarnpkg.com/react-zmage/-/react-zmage-0.8.5-beta.33.tgz#85dfb2e5dc82b200ba513be955530b8911837d3e"
+  integrity sha512-sUozUOcPowDkmduPlX1GJbD8h1s0cBsDO6H6SBfItVy5s7QOnFHoQuG7IG1+mypI8p4T4nBJ42BNlh2a/mC6pw==
   dependencies:
     classnames "^2.2.6"
     lodash.memoize "^4.1.2"
