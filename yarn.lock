@@ -2020,7 +2020,7 @@ queue-microtask@^1.2.2:
   resolved "https://registry.npmjs.org/queue-microtask/-/queue-microtask-1.2.3.tgz"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
-react-dom@^16.12.0:
+react-dom@^16.6.3:
   version "16.14.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.14.0.tgz#7ad838ec29a777fb3c75c3a190f661cf92ab8b89"
   integrity sha512-1gCeQXDLoIqMgqD3IO2Ah9bnf0w9kzhwN5q4FGnHZ67hBm9yePzB5JJAIQCc8x3pFnNlwFq4RidZggNAAkzWWw==
@@ -2083,18 +2083,18 @@ react-transition-group@^4.4.2:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-zmage@0.8.5-beta.33:
-  version "0.8.5-beta.33"
-  resolved "https://registry.yarnpkg.com/react-zmage/-/react-zmage-0.8.5-beta.33.tgz#85dfb2e5dc82b200ba513be955530b8911837d3e"
-  integrity sha512-sUozUOcPowDkmduPlX1GJbD8h1s0cBsDO6H6SBfItVy5s7QOnFHoQuG7IG1+mypI8p4T4nBJ42BNlh2a/mC6pw==
+react-zmage@0.8.5-beta.31:
+  version "0.8.5-beta.31"
+  resolved "https://registry.yarnpkg.com/react-zmage/-/react-zmage-0.8.5-beta.31.tgz#91cfbb1ecf98d1f60511d0c57d912de0afb9dd96"
+  integrity sha512-Mpq04ZOEP5zU4pVsfOWpeQC+cy1SaKx6Nw7BD+2mJRpmPaa5Y2Xj1bnySigxCU5u2sijg647y+We1bcofSOnBw==
   dependencies:
     classnames "^2.2.6"
     lodash.memoize "^4.1.2"
     prop-types "^15.6.2"
-    react "^16.12.0"
-    react-dom "^16.12.0"
+    react "^16.6.3"
+    react-dom "^16.6.3"
 
-react@^16.12.0:
+react@^16.6.3:
   version "16.14.0"
   resolved "https://registry.yarnpkg.com/react/-/react-16.14.0.tgz#94d776ddd0aaa37da3eda8fc5b6b18a4c9a3114d"
   integrity sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g==
