@@ -1,8 +1,9 @@
 import React from "react";
+import "antd/lib/style/index.css";
 
 import { IconButton, ImageList, ImageListItem } from "@mui/material";
 import { ClearRounded } from "@mui/icons-material";
-import Zmage from "react-zmage";
+import { Image } from "antd";
 
 type Props = {
   img_list: Array<string>;
@@ -44,7 +45,7 @@ const ImgBox = (props: Props) => {
                 }}
               />
             </IconButton>
-            <Zmage src={item} alt="img" defaultPage={index} set={img_set} />
+            <Image src={item} alt="img" />
           </ImageListItem>
         ))}
       </ImageList>
