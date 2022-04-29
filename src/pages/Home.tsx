@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar/Sidebar";
 import { useViewport } from "../context/viewportContext";
 
+import "react-photo-view/dist/react-photo-view.css";
 import "../style/Home.css";
 
 function Home() {
