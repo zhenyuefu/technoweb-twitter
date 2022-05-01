@@ -38,8 +38,8 @@ function SidebarUser({username}: Props) {
         content: res.message,
       });
       navigate("/");
-    } catch (err: any) {
-      Notification.error({title: 'Error', content: err.message});
+    } catch (err) {
+      Notification.error({title: 'Error', content: (err as Error).message});
     }
   }
 

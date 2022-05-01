@@ -19,7 +19,6 @@ root.render(
       <RecoilRoot>
         <BrowserRouter>
           <App/>
-          <App/>
         </BrowserRouter>
       </RecoilRoot>
     </ViewportProvider>
