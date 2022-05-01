@@ -36,11 +36,12 @@ export async function logout() {
 export async function register(data: IFormRegister) {
   const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/user`, {
     method: "POST",
-    mode: "cors",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
+    credentials: "include",
+    mode: "cors",
   });
   return handleResponse(res);
 }

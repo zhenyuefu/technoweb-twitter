@@ -14,7 +14,7 @@ const container = document.getElementById("root") as Element;
 const root = createRoot(container);
 
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <ViewportProvider>
       <RecoilRoot>
         <BrowserRouter>
@@ -22,7 +22,7 @@ root.render(
         </BrowserRouter>
       </RecoilRoot>
     </ViewportProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 

@@ -60,10 +60,10 @@ function SidebarUser({username}: Props) {
           </div>
 
           <div className="sidebar__user__info">
-            <h4 style={{margin: 0}}>
+            <h4 style={{margin: 0, lineHeight: "1.5"}}>
               {data?.user?.firstName + " " + data?.user?.lastName}
             </h4>
-            <p style={{margin: 0, color: "gray"}}>@{username}</p>
+            <p style={{margin: 0, color: "gray", lineHeight: "1.5"}}>@{username}</p>
           </div>
 
         </div>
