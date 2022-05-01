@@ -1,7 +1,9 @@
-import React, { Suspense } from "react";
+import React, {Suspense, useEffect} from "react";
 
-import { Navigate, Route, Routes } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import {Navigate, Route, Routes} from "react-router-dom";
+import {useRecoilValue} from "recoil";
+import {authAtom} from "./context/auth";
+import {LoadingPage} from "./components/Loading/LoadingPage";
 
 // import Feed from "./components/Feed/Feed";
 const Feed = React.lazy(() => import("./components/Feed/Feed"));
@@ -13,19 +15,31 @@ const Login = React.lazy(() => import("./pages/Auth/Login"));
 const Signup = React.lazy(() => import("./pages/Auth/Signup"));
 // import Home from "./pages/Home";
 const Home = React.lazy(() => import("./pages/Home"));
-import { authAtom } from "./context/auth";
-import { LoadingPage } from "./components/Loading/LoadingPage";
 
 function App() {
+
+  useEffect(() => {
+      const darkThemeMq = window.matchMedia("(prefers-color-scheme: dark)");
+
+      darkThemeMq.addListener(e => {
+        if (e.matches) {
+          document.body.setAttribute('arco-theme', 'dark');
+        } else {
+          document.body.removeAttribute('arco-theme');
+        }
+      });
+    }
+    , []);
+
   return (
     <div className="app">
-      <Suspense fallback={<LoadingPage />}>
+      <Suspense fallback={<LoadingPage/>}>
         <Routes>
           <Route
             path="/*"
             element={
               <RequiredAuth redirectTo="/i/flow/login">
-                <Home />
+                <Home/>
               </RequiredAuth>
             }
           >

@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {useSetRecoilState} from "recoil";
 import {Link, useNavigate} from "react-router-dom";
 import {Button, Form, Input, Message, Space, Typography} from "@arco-design/web-react";
-import {Login as LoginIcon} from "@icon-park/react/lib/map";
+import {Login as LoginIcon} from "@icon-park/react";
 
 import {checkEmail, checkUsername, register} from "../../utils/auth";
 import {IFormRegister} from "../../types";
