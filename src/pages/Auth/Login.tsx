@@ -27,8 +27,8 @@ function Login() {
         username: res.username,
       });
       navigate("/home");
-    } catch (err: any) {
-      Message.error(err.message);
+    } catch (err) {
+      Message.error((err as Error).message);
       setIsFetching(false);
     }
   };

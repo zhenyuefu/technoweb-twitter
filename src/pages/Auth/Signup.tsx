@@ -98,9 +98,9 @@ function Signup() {
                              setEmailState('validating');
                              await checkEmail(value);
                              setEmailState("success");
-                           } catch (e: any) {
+                           } catch (e) {
                              setEmailState('error');
-                             callback(e.message);
+                             callback((e as Error).message);
                            }
                          }
                        }]}>
@@ -125,9 +125,9 @@ function Signup() {
                              setUsernameState('validating');
                              await checkUsername(value);
                              setUsernameState("success");
-                           } catch (e: any) {
+                           } catch (e) {
                              setUsernameState('error');
-                             callback(e.message);
+                             callback((e as Error).message);
                            }
                          }
                        }
