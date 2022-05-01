@@ -1,60 +1,26 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import {useSetRecoilState} from "recoil";
+import {Link, useNavigate} from "react-router-dom";
+import {Button, Checkbox, Form, Input, Message, Typography} from "@arco-design/web-react";
+import {Login as LoginIcon} from "@icon-park/react"
 
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import {
-  Container,
-  CssBaseline,
-  Box,
-  Avatar,
-  Typography,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Grid,
-  Link,
-  Snackbar,
-  Alert,
-} from "@mui/material";
-
-import { useNavigate } from "react-router-dom";
-import { authAtom } from "../../context/auth";
-import { useSetRecoilState } from "recoil";
-import { login } from "../../utils/auth";
-import { IFormLogin, ISnackbarState } from "../../types";
-import { LoadingButton } from "@mui/lab";
+import {authAtom} from "../../context/auth";
+import {login} from "../../utils/auth";
+import {IFormLogin} from "../../types";
 
 function Login() {
-  const { handleSubmit, control } = useForm<IFormLogin>();
-
+  const [form] = Form.useForm();
   const navigate = useNavigate();
   const setAuth = useSetRecoilState(authAtom);
-  const [snackBarState, setSnackBarState] = useState<ISnackbarState>({
-    open: false,
-    vertical: "top",
-    horizontal: "center",
-  });
-  const { vertical, horizontal, open } = snackBarState;
-  const [severity, setSeverity] = useState<"success" | "error">("success");
-  const [infoMessage, setInfoMessage] = useState("");
   const [isFetching, setIsFetching] = useState(false);
 
-  const handleOpen = () => {
-    setSnackBarState({ ...snackBarState, open: true });
-  };
-
-  const handleClose = () => {
-    setSnackBarState({ ...snackBarState, open: false });
-  };
-
-  const onSubmit: SubmitHandler<IFormLogin> = async (data) => {
+  const onSubmit = async (data: IFormLogin) => {
     try {
       setIsFetching(true);
       const res = await login(data);
-      setSeverity("success");
-      setInfoMessage(res.message);
-      handleOpen();
+      setIsFetching(false);
+      Message.success(res.message);
       setAuth({
         auth: true,
         uid: res.uid,
@@ -62,126 +28,101 @@ function Login() {
       });
       navigate("/home");
     } catch (err: any) {
-      // console.log(err);
+      Message.error(err.message);
       setIsFetching(false);
-      setSeverity("error");
-      setInfoMessage(err.message);
-      handleOpen();
     }
   };
-  // console.log(errors);
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 8,
+    <div>
+      <div style={{
+        marginTop: "100px",
+        justifyContent: "center",
+        alignItems: "center",
+        display: "flex",
+      }
+      }>
+        <LoginIcon theme="outline" size="32" fill="#333"/>
+      </div>
+
+      <div
+        style={{
+          width: "100%",
           display: "flex",
-          flexDirection: "column",
+          justifyContent: "center",
           alignItems: "center",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <Box
-          component="form"
-          onSubmit={handleSubmit(onSubmit)}
-          noValidate
-          sx={{ mt: 1 }}
-        >
-          <Controller
-            name="email"
-            control={control}
-            defaultValue=""
-            rules={{ required: true }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                autoComplete="email"
-                autoFocus
-              />
-            )}
-          />
-          <Controller
-            name="password"
-            control={control}
-            defaultValue=""
-            rules={{ required: true }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
-            )}
-          />
-          <Controller
-            name="remember"
-            control={control}
-            defaultValue={false}
-            render={({ field }) => (
-              <FormControlLabel
-                control={<Checkbox {...field} value="remember" />}
-                label="Remember me"
-              />
-            )}
-          />
-          <LoadingButton
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            loading={isFetching}
-          >
+        <Typography>
+          <Typography.Title heading={5}>
             Sign In
-          </LoadingButton>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="/i/flow/signup" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
-        </Box>
-      </Box>
+          </Typography.Title>
+        </Typography>
+      </div>
 
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={open}
-        onClose={handleClose}
-        key={vertical + horizontal}
-      >
-        <Alert
-          onClose={handleClose}
-          severity={severity}
-          sx={{ width: "100%" }}
+      <div style={{
+        display: 'flex',
+        alignItems: "center",
+        justifyContent: "center",
+      }}>
+        <Form
+          form={form}
+          layout='vertical'
+          style={{maxWidth: 380}}
+          scrollToFirstError
+          onSubmit={onSubmit}
+          disabled={isFetching}
+          size='large'
         >
-          {infoMessage}
-        </Alert>
-      </Snackbar>
-    </Container>
+          <Form.Item label='Email' field='email' hasFeedback={true}
+                     rules={[{required: true, message: 'Email is required'}]}>
+            <Input placeholder='please enter your email'/>
+          </Form.Item>
+          <Form.Item
+            label='Password'
+            field='password'
+            hasFeedback
+            rules={[{required: true, message: 'Password is required'}]}
+          >
+            <Input.Password placeholder='please enter your password'/>
+          </Form.Item>
+          <Form.Item
+            field='remember'
+
+          >
+            <Checkbox>Remember me</Checkbox>
+
+          </Form.Item>
+          <Form.Item
+          >
+            <Button
+              type='primary' htmlType='submit' long
+              loading={isFetching}
+            >
+              Login
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+
+      <div style={{
+        display: 'flex',
+        margin: "auto",
+        width: 360,
+        justifyContent: "flex-end"
+      }}>
+
+
+        <Typography>
+          <Typography.Text>
+            <Link to="/i/flow/signup">
+              {"Don't have an account? Sign Up"}
+            </Link>
+          </Typography.Text>
+        </Typography>
+
+      </div>
+    </div>
   );
 }
 

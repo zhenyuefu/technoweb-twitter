@@ -1,23 +1,18 @@
-import Twitter from "@mui/icons-material/Twitter";
-import { CircularProgress, Stack } from "@mui/material";
 import React from "react";
+import {Spin} from "@arco-design/web-react";
 
 export const LoadingPage = () => {
   return (
-    <Stack
-      alignItems={"center"}
-      justifyContent={"center"}
-      spacing={12}
-      sx={{ height: "100vh" }}
+    <div
+      style={{
+        display: "flex",
+        width: "100%",
+        height: "100vh",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
     >
-      <Twitter sx={{ display: "flex", color: "#1da1f2", fontSize: "150px" }} />
-
-      <CircularProgress
-        className="circularProgress"
-        thickness={5}
-        size={80}
-        sx={{ display: "flex", color: "#1da1f2" }}
-      />
-    </Stack>
+      <Spin dot size={40}/>
+    </div>
   );
 };

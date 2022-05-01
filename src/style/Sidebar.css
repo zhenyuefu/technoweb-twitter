@@ -20,9 +20,10 @@
   align-items: center;
 }
 
-.sidebar > .MuiSvgIcon-root {
-  margin: 0;
-  padding: 14px;
+.sidebar__option > .arco-icon {
+    margin: 0;
+    padding: 14px;
+    font-size: 20px;
 }
 
 .sidebar__twitter-icon {
@@ -33,13 +34,14 @@
 }
 
 .sidebar__button {
-  background-color: var(--twitter-color) !important;
-  border: 0 !important;
-  color: #fff !important;
-  font-weight: 300 !important;
-  border-radius: 9999px !important;
-  height: 40px !important;
-  margin-top: 20px !important;
+    background-color: var(--twitter-color) !important;
+    border: 0 !important;
+    color: #fff !important;
+    border-radius: 9999px !important;
+    height: 40px !important;
+    margin-top: 20px !important;
+    width: 100%;
+    font-weight: bold !important;
 }
 
 .sidebar__button:hover {
@@ -47,24 +49,34 @@
 }
 
 .sidebar__round-button {
-  background-color: var(--twitter-color) !important;
-  margin-top: 20px !important;
-  border-radius: 9999px !important;
-  color: #fff !important;
-  padding: 10px !important;
-  margin-left: 4px !important;
-  /* left: 50% !important; */
+    background-color: var(--twitter-color) !important;
+    margin-top: 20px !important;
+    color: #fff !important;
+    padding: 10px !important;
+    margin-left: 4px !important;
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 9999px !important;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    /* left: 50% !important; */
+}
+
+.sidebar__round-button > svg {
+    position: relative;
+    fill: #fff;
 }
 
 .sidebar__round-button:hover {
-  background-color: #1a8cd8 !important;
+    background-color: #1a8cd8;
 }
 
 .sidebar__option {
-  display: flex;
-  width: fit-content;
-  align-items: center;
-  cursor: pointer;
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    cursor: pointer;
   border-radius: 9999px;
   transition: color 0.15s ease-out;
 }
@@ -76,10 +88,6 @@
 .sidebar__option:hover {
   background-color: var(--button-background-color);
   color: var(--twitter-color);
-}
-
-.sidebar__option > .MuiSvgIcon-root {
-  padding: 14px;
 }
 
 .sidebar__option > span {

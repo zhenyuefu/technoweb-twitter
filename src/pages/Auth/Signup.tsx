@@ -1,316 +1,203 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
+import {useSetRecoilState} from "recoil";
+import {Link, useNavigate} from "react-router-dom";
+import {Button, Form, Input, Message, Space, Typography} from "@arco-design/web-react";
+import {Login as LoginIcon} from "@icon-park/react/lib/map";
 
-import { SubmitHandler, useForm, Controller } from "react-hook-form";
+import {checkEmail, checkUsername, register} from "../../utils/auth";
+import {IFormRegister} from "../../types";
+import {authAtom} from "../../context/auth";
+import {sleep} from "../../utils/utils";
 
-import {
-  Container,
-  CssBaseline,
-  Box,
-  Avatar,
-  Typography,
-  Grid,
-  TextField,
-  Link,
-  Snackbar,
-  Alert,
-} from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { existEmail, existUsername, register } from "../../utils/auth";
-import { IFormRegister, ISnackbarState } from "../../types";
-import { useSetRecoilState } from "recoil";
-import { authAtom } from "../../context/auth";
-import { useNavigate } from "react-router-dom";
-import { LoadingButton } from "@mui/lab";
-import { sleep } from "../../utils/utils";
+type IValidStatus = "success" | "error" | "validating";
 
 function Signup() {
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<IFormRegister>({ mode: "onChange" });
-  const [isFetching, setIsFetching] = React.useState(false);
-  const [snackBarState, setSnackBarState] = useState<ISnackbarState>({
-    open: false,
-    vertical: "top",
-    horizontal: "center",
-  });
-  const { vertical, horizontal, open } = snackBarState;
-  const [severity, setSeverity] = useState<"success" | "error">("success");
-  const [infoMessage, setInfoMessage] = useState("");
-  const [usernameExist, setUsernameExist] = useState(false);
-  const [emailExist, setEmailExist] = useState(false);
+  const [form] = Form.useForm<IFormRegister>();
+
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  const [usernameState, setUsernameState] = useState<IValidStatus>();
+  const [emailState, setEmailState] = useState<IValidStatus>();
+
   const setAuth = useSetRecoilState(authAtom);
   const navigate = useNavigate();
 
-  const handleOpen = () => {
-    setSnackBarState({ ...snackBarState, open: true });
-  };
 
-  const handleClose = () => {
-    setSnackBarState({ ...snackBarState, open: false });
-  };
-
-  async function onUsernameBlur(name: string) {
+  const onSubmit = async (data: IFormRegister) => {
     try {
-      await existUsername(name);
-      setUsernameExist(true);
-    } catch (e) {
-      setUsernameExist(false);
-    }
-  }
-
-  async function onEmailBlur(email: string) {
-    try {
-      await existEmail(email);
-      setEmailExist(true);
-    } catch (e) {
-      setEmailExist(false);
-    }
-  }
-
-  const onSubmit: SubmitHandler<IFormRegister> = async (data) => {
-    try {
-      setIsFetching(true);
+      setIsSubmitting(true);
+      await sleep(3000);
       const res = await register(data);
       setAuth({
         auth: true,
         username: res.username,
         uid: String(res.uid),
       });
-      setSeverity("success");
-      setInfoMessage(res.message + " Redirecting...");
-      handleOpen();
+      Message.success(res.message + " Redirecting...");
       await sleep(2000);
       navigate("/home");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      // console.log(err);
-      setSeverity("error");
-      setInfoMessage(err.message);
-      handleOpen();
-      setIsFetching(false);
+      Message.error(err.message);
+      setIsSubmitting(false);
     }
   };
 
-  // console.log(errors);
 
   return (
     <div>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
+      <div style={{
+        marginTop: "100px",
+        justifyContent: "center",
+        alignItems: "center",
+        display: "flex",
+      }
+      }>
+        <LoginIcon theme="outline" size="32" fill="#333"/>
+      </div>
+
+      <div style={{
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+      >
+        <Typography>
+          <Typography.Title heading={5}>
+            Sign Up
+          </Typography.Title>
+        </Typography>
+      </div>
+
+      <div style={{
+        display: 'flex',
+        alignItems: "center",
+        justifyContent: "center",
+      }}>
+        <Form
+          form={form}
+          layout='vertical'
+          style={{maxWidth: 380}}
+          scrollToFirstError
+          onSubmit={onSubmit}
+          disabled={isSubmitting}
+          size="large"
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
-          <Box
-            component="form"
-            noValidate
-            sx={{ mt: 3 }}
-            onSubmit={handleSubmit(onSubmit)}
+          <Form.Item label='Email' field='email' hasFeedback
+                     validateStatus={emailState}
+                     validateTrigger={'onBlur'}
+                     rules={[{required: true, message: 'Email is required'},
+                       {
+                         type: 'email',
+                         message: 'Wrong email format'
+                       },
+                       {
+                         validator: async (value, callback) => {
+                           try {
+                             setEmailState('validating');
+                             await checkEmail(value);
+                             setEmailState("success");
+                           } catch (e: any) {
+                             setEmailState('error');
+                             callback(e.message);
+                           }
+                         }
+                       }]}>
+            <Input placeholder='please enter your email'/>
+          </Form.Item>
+          <Form.Item label='Username' field='username' hasFeedback
+                     validateTrigger={'onBlur'}
+                     validateStatus={usernameState}
+                     rules={[{required: true, message: 'Username is required'},
+                       {
+                         minLength: 6,
+                         maxLength: 16,
+                         message: 'Username must be 6-16 characters'
+                       },
+                       {
+                         match: /^[a-zA-Z\d_-]{6,16}$/i, message:
+                           'Username can only use letters numbers and underscores'
+                       },
+                       {
+                         validator: async (value, callback) => {
+                           try {
+                             setUsernameState('validating');
+                             await checkUsername(value);
+                             setUsernameState("success");
+                           } catch (e: any) {
+                             setUsernameState('error');
+                             callback(e.message);
+                           }
+                         }
+                       }
+
+                     ]}>
+            <Input placeholder='please enter your username'/>
+          </Form.Item>
+          <Form.Item
+            label='Password'
+            field='password'
+            hasFeedback
+            rules={[
+              {required: true, message: 'Password is required'},
+              {
+                minLength: 8,
+                maxLength: 16,
+                message: 'Password must be 8-16 characters'
+              },
+              {
+                match: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d~!@#$%^&*]{8,16}$/i,
+                message:
+                  'Password must contain contain both numbers and letters'
+              }
+            ]}
           >
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <Controller
-                  name="firstName"
-                  control={control}
-                  rules={{ required: false, pattern: /^[a-zA-Z]+$/i }}
-                  defaultValue=""
-                  render={({ field, fieldState }) => (
-                    <TextField
-                      {...field}
-                      autoComplete="given-name"
-                      name="firstName"
-                      fullWidth
-                      id="firstName"
-                      label="First Name"
-                      error={fieldState.invalid}
-                      autoFocus
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Controller
-                  name="lastName"
-                  control={control}
-                  rules={{ required: false, pattern: /^[a-zA-Z]+$/i }}
-                  defaultValue=""
-                  render={({ field, fieldState }) => (
-                    <TextField
-                      {...field}
-                      fullWidth
-                      id="lastName"
-                      label="Last Name"
-                      name="lastName"
-                      autoComplete="family-name"
-                      error={fieldState.invalid}
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Controller
-                  name="username"
-                  control={control}
-                  rules={{
-                    required: true,
-                    minLength: 6,
-                    maxLength: 16,
-                    pattern: /^[a-zA-Z\d_-]{6,16}$/i,
-                  }}
-                  defaultValue=""
-                  render={({ field, fieldState }) => (
-                    <TextField
-                      {...field}
-                      required
-                      fullWidth
-                      name="username"
-                      label="Username"
-                      type="username"
-                      id="username"
-                      autoComplete="username"
-                      color={
-                        fieldState.isDirty && !usernameExist
-                          ? "success"
-                          : "primary"
-                      }
-                      error={
-                        fieldState.invalid ||
-                        (usernameExist && fieldState.isDirty)
-                      }
-                      onBlur={() => onUsernameBlur(field.value)}
-                      helperText={
-                        (fieldState.error &&
-                          (fieldState.error.type === "required"
-                            ? "Username is Required"
-                            : fieldState.error.type ===
-                              ("minLength" || "maxLength ")
-                            ? "Username must be between 6 and 16 characters"
-                            : "Username can only use letters numbers and underscores")) ||
-                        (usernameExist && "Username already exist")
-                      }
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Controller
-                  name="email"
-                  control={control}
-                  rules={{
-                    required: true,
-                    pattern:
-                      /^[a-zA-Z\d_-]+@[a-zA-Z\d_-]+(\.[a-zA-Z\d_-]+)+$/i,
-                  }}
-                  defaultValue=""
-                  render={({ field, fieldState }) => (
-                    <TextField
-                      {...field}
-                      required
-                      fullWidth
-                      id="email"
-                      label="Email Address"
-                      name="email"
-                      onBlur={() => onEmailBlur(field.value)}
-                      autoComplete="email"
-                      color={
-                        fieldState.isDirty && !emailExist
-                          ? "success"
-                          : "primary"
-                      }
-                      error={
-                        fieldState.invalid || (emailExist && fieldState.isDirty)
-                      }
-                      helperText={
-                        (fieldState.error &&
-                          (fieldState.error.type === "required"
-                            ? "Email is Required"
-                            : "This is not a valid email")) ||
-                        (emailExist && "This email is already registered")
-                      }
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Controller
-                  name="password"
-                  control={control}
-                  rules={{
-                    required: true,
-                    minLength: 8,
-                    maxLength: 16,
-                    pattern:
-                      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d~!@#$%^&*]{8,16}$/i,
-                  }}
-                  defaultValue=""
-                  render={({ field, fieldState }) => (
-                    <TextField
-                      {...field}
-                      required
-                      fullWidth
-                      name="password"
-                      label="Password"
-                      type="password"
-                      id="password"
-                      autoComplete="new-password"
-                      error={fieldState.invalid}
-                      helperText={
-                        fieldState.error &&
-                        (fieldState.error.type === "required"
-                          ? "Password is Required"
-                          : "Password must be 8-16 characters and contain both numbers and letters")
-                      }
-                    />
-                  )}
-                />
-              </Grid>
-            </Grid>
-            <LoadingButton
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              loading={isFetching}
-              disabled={Object.keys(errors).length !== 0 || usernameExist}
+            <Input.Password placeholder='please enter your password'/>
+          </Form.Item>
+          <Form.Item>
+            <Space>
+              <Form.Item label='First Name'
+                         field='firstName' hasFeedback
+                         rules={[{match: /^[a-zA-Z]+$/i, message: 'Can only contain characters'}]}>
+
+                <Input placeholder='First Name'/>
+              </Form.Item>
+              <Form.Item label='Last Name'
+                         field='lastName' hasFeedback
+                         rules={[{match: /^[a-zA-Z]+$/i, message: 'Can only contain characters'}]}>
+                <Input placeholder='Last Name'/>
+              </Form.Item>
+            </Space>
+          </Form.Item>
+          <Form.Item>
+            <Button
+              type='primary' htmlType='submit' long
+              loading={isSubmitting}
             >
               Sign Up
-            </LoadingButton>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="/i/flow/login" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
-      </Container>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={open}
-        onClose={handleClose}
-        key={vertical + horizontal}
-      >
-        <Alert
-          onClose={handleClose}
-          severity={severity}
-          sx={{ width: "100%" }}
-        >
-          {infoMessage}
-        </Alert>
-      </Snackbar>
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+
+      <div style={{
+        display: 'flex',
+        margin: "auto",
+        width: 360,
+        justifyContent: "flex-end"
+      }}>
+
+
+        <Typography>
+          <Typography.Text>
+            <Link to="/i/flow/login">
+              {"Already have an account? Sign in"}
+            </Link>
+          </Typography.Text>
+        </Typography>
+
+      </div>
     </div>
   );
 }

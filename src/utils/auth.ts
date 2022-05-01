@@ -1,5 +1,5 @@
-import { IFormLogin, IFormRegister } from "../types";
-import { handleResponse } from "./utils";
+import {IFormLogin, IFormRegister} from "../types";
+import {handleResponse} from "./utils";
 
 export async function login(data: IFormLogin) {
   const res = await fetch(
@@ -17,6 +17,22 @@ export async function login(data: IFormLogin) {
   return handleResponse(res);
 }
 
+export async function logout() {
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/logout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      mode: "cors",
+    })
+    return handleResponse(res);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function register(data: IFormRegister) {
   const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/user`, {
     method: "POST",
@@ -29,7 +45,7 @@ export async function register(data: IFormRegister) {
   return handleResponse(res);
 }
 
-export async function existUsername(username: string) {
+export async function checkUsername(username: string) {
   const res = await fetch(
     `${
       import.meta.env.VITE_API_BASE_URL
@@ -41,10 +57,15 @@ export async function existUsername(username: string) {
       },
     }
   );
-  return handleResponse(res);
+  const json = await handleResponse(res);
+  if (!json.exists) {
+    return Promise.resolve("Username not exists");
+  }
+  return Promise.reject(new Error("This username already exists"));
+
 }
 
-export async function existEmail(email: string) {
+export async function checkEmail(email: string) {
   const res = await fetch(
     `${import.meta.env.VITE_API_BASE_URL}/api/user/email?email=${email}`,
     {
@@ -54,5 +75,9 @@ export async function existEmail(email: string) {
       },
     }
   );
-  return handleResponse(res);
+  const json = await handleResponse(res);
+  if (!json.exists) {
+    return Promise.resolve("Email not exists");
+  }
+  return Promise.reject(new Error("This email already registered"));
 }
