@@ -85,7 +85,7 @@ function TweetBox() {
             multiple
             listType="picture-card"
             limit={4}
-            accept="image/png, image/jpeg, image/gif, image/tiff, image/webp"
+            accept="image/png, image/jpeg, image/gif, image/tiff"
             onPreview={(file) => {
               setImgPreview({
                 src: URL.createObjectURL(file.originFile as Blob),

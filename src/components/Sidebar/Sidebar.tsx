@@ -1,7 +1,7 @@
 import React from "react";
 import "../../style/Sidebar.css";
 import {IconEmail, IconHome, IconNotification, IconSearch, IconTwitter, IconUser,} from "@arco-design/web-react/icon";
-import {Button} from "@arco-design/web-react";
+import {Button, Grid} from "@arco-design/web-react";
 import SidebarOption from "./SidebarOption";
 import {useViewport} from "../../context/viewportContext";
 import {NavLink} from "react-router-dom";
@@ -14,6 +14,8 @@ const navlinkStyle = {
     textDecoration: "none",
     color: "black",
 };
+
+const Row = Grid.Row;
 
 
 function Sidebar() {
@@ -64,9 +66,9 @@ function Sidebar() {
               )}
           </div>
 
-          <div className="sidebar__down">
+          <Row className="sidebar__down">
               <SidebarUser username={username}></SidebarUser>
-          </div>
+          </Row>
       </div>
     );
 }
