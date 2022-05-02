@@ -28,18 +28,21 @@
 }
 
 .tweetbox__tweetbutton {
-  background-color: var(--twitter-color) !important;
-  border: 0 !important;
-  color: #fff !important;
-  font-weight: 900 !important;
-  border-radius: 9999px !important;
-  height: 40px !important;
-  width: 80px;
+  font-weight: 900;
+  border-radius: 9999px;
+  height: 40px;
+  /*background-color: var(--twitter-color) !important;*/
 }
 
 .tweetbox__buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   /* margin-top: 20px; */
+}
+
+.tweetbox__picture {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  align-items: center;
 }
