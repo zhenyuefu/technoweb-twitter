@@ -20,6 +20,68 @@ export interface IFormLogin {
   remember: boolean;
 }
 
+export interface IFormPost {
+  content: string;
+  images: any[];
+}
+
+export interface IImage {
+  account_id?: number;
+  account_url?: string;
+  ad_type?: number
+  ad_url?: string
+  animated?: boolean
+  bandwidth?: number
+  datetime?: number
+  deletehash: string
+  description?: string
+  edited?: string
+  favorite?: boolean
+  has_sound?: boolean
+  height: number
+  id: string
+  in_gallery?: boolean
+  in_most_viral?: boolean
+  is_ad?: boolean
+  link: string
+  name: string
+  nsfw?: any
+  section?: any
+  size: number
+  tags?: []
+  title?: string
+  type?: string
+  views?: number
+  vote?: any
+  width: number
+}
+
+interface IUser {
+  _id: string;
+  email: string;
+  username: string;
+  firstName?: string;
+  lastName?: string;
+  updatedAt?: Date;
+  avatar?: string;
+  introduction?: string;
+  bgPicture?: string;
+}
+
+interface IPost {
+  _id: string;
+  author: IUser;
+  content: string;
+  imagePath?: IImage[];
+  createAt: Date;
+  comments?: IComment[];
+  likes?: IUser[];
+  countLikes: number;
+  reTweet?: any[];
+  countReTweet: number;
+  isDelete: boolean;
+}
+
 /**
  * if you are using DOM api directly
  * e.g.

@@ -5,7 +5,6 @@
   border-color: var(--twitter-border-color);
   min-width: min-content;
   overflow-y: scroll;
-  background-color: var(--twitter-background-color);
   max-width: 650px;
   position: relative;
   align-items: stretch;
@@ -25,8 +24,8 @@
 .feed__header {
   top: 0;
   position: sticky;
-  background-color: white;
   z-index: 3;
   /* border: 1px solid var(--twitter-border-color); */
   padding: 15px 20px;
+  background-color: var(--color-bg-3);
 }

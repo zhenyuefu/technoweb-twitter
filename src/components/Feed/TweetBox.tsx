@@ -1,21 +1,47 @@
-import {Avatar, TextField} from "@mui/material";
 import React, {useState} from "react";
 import "../../style/TweetBox.css";
-import {Button, Image, Message, Upload} from "@arco-design/web-react";
+import {Avatar, Button, Image, Input, Message, Upload} from "@arco-design/web-react";
 import {UploadItem} from "@arco-design/web-react/es/Upload";
+import {addPost} from "../../utils/post";
+import {IImage} from "../../types";
+import {IconUser} from "@arco-design/web-react/icon";
+import useSWR from "swr";
+import {fetcher} from "../../utils/utils";
+import {useRecoilValue} from "recoil";
+import {authAtom} from "../../context/auth";
+
 
 function TweetBox() {
 
+  const user = useRecoilValue(authAtom);
+
+  const {data, mutate} = useSWR(
+    `/api/user/profile?username=${user.username}`,
+    fetcher
+  );
+
   const [disabled, setDisabled] = React.useState(false)
-  const [imgInfos, setImgInfos] = React.useState<any[]>([])
+  const [loading, setLoading] = React.useState(false)
+  const [imgInfos, setImgInfos] = React.useState<IImage[]>([])
+  const [text, setText] = React.useState("")
 
-
-  const onSubmit = (e: Event) => {
-    e.stopPropagation();
+  const onSubmit = () => {
+    setLoading(true)
+    addPost({
+      content: text,
+      images: imgInfos
+    }).then(r => {
+      Message.info(r.message)
+      setLoading(false)
+      mutate("/api/post")
+    }).catch(e => {
+      Message.error(e.message)
+      setLoading(false)
+    })
   };
 
   const onChange = (files: UploadItem[], file: UploadItem) => {
-    const imgList: any[] = [];
+    const imgList: IImage[] = [];
     files.forEach(file => {
       if (file.status === "done") {
         imgList.push((file.response as any).data);
@@ -41,10 +67,16 @@ function TweetBox() {
         }
       ).then(res => {
         setDisabled(false)
-        res.json()
+        res.json().then(r => {
+          if (r.success) {
+            Message.success("Delete success")
+          } else {
+            Message.error("Delete failed")
+          }
+        })
       })
     }
-  }
+  };
 
   const [imgPreview, setImgPreview] = useState({
     visible: false,
@@ -67,17 +99,26 @@ function TweetBox() {
       />
 
       <div style={{paddingTop: "4px", marginRight: "12px"}}>
-        <Avatar/>
+        <Avatar>
+          {data?.user?.avatar ? <img src={data?.user?.avatar} alt={user.username}/> : <IconUser/>}
+        </Avatar>
       </div>
       <div className="tweetbox__input">
-        <TextField
+        <Input.TextArea
           placeholder="What's happening?"
-          type="text"
-          variant="standard"
-          maxRows={5}
-          multiline
-          fullWidth
-          InputProps={{disableUnderline: true}}
+          autoSize={{minRows: 2, maxRows: 6}}
+          maxLength={500}
+          showWordLimit
+          style={{
+            flex: 1,
+            border: "none",
+            outline: "none",
+            backgroundColor: "transparent",
+            resize: "none",
+            fontSize: 20,
+          }}
+          value={text}
+          onChange={(e) => setText(e)}
         />
 
         <div className="tweetbox__picture">
@@ -104,7 +145,8 @@ function TweetBox() {
           <Button
             type="primary"
             disabled={disabled}
-            className="tweetbox__tweetbutton"
+            loading={loading}
+            shape='round'
             onClick={onSubmit}>Tweet</Button>
 
         </div>
