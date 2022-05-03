@@ -5,7 +5,7 @@ import {UploadItem} from "@arco-design/web-react/es/Upload";
 import {addPost} from "../../utils/post";
 import {IImage} from "../../types";
 import {IconUser} from "@arco-design/web-react/icon";
-import useSWR from "swr";
+import useSWR, {useSWRConfig} from "swr";
 import {fetcher} from "../../utils/utils";
 import {useRecoilValue} from "recoil";
 import {authAtom} from "../../context/auth";
@@ -15,7 +15,8 @@ function TweetBox() {
 
   const user = useRecoilValue(authAtom);
 
-  const {data, mutate} = useSWR(
+  const {mutate} = useSWRConfig();
+  const {data} = useSWR(
     `/api/user/profile?username=${user.username}`,
     fetcher
   );
@@ -24,6 +25,7 @@ function TweetBox() {
   const [loading, setLoading] = React.useState(false)
   const [imgInfos, setImgInfos] = React.useState<IImage[]>([])
   const [text, setText] = React.useState("")
+  const [fileList, setFileList] = React.useState<UploadItem[]>([]);
 
   const onSubmit = () => {
     setLoading(true)
@@ -33,6 +35,9 @@ function TweetBox() {
     }).then(r => {
       Message.info(r.message)
       setLoading(false)
+      setText("");
+      setFileList([]);
+      setImgInfos([])
       mutate("/api/post")
     }).catch(e => {
       Message.error(e.message)
@@ -41,6 +46,7 @@ function TweetBox() {
   };
 
   const onChange = (files: UploadItem[], file: UploadItem) => {
+    setFileList(files);
     const imgList: IImage[] = [];
     files.forEach(file => {
       if (file.status === "done") {
@@ -55,7 +61,7 @@ function TweetBox() {
   };
 
 
-  const onRemove = (file: UploadItem) => {
+  const onRemove = (file: UploadItem, files: UploadItem[]) => {
     if (file.status === "done") {
       setDisabled(true)
       const deleteHash = (file.response as any).data.deletehash;
@@ -70,6 +76,7 @@ function TweetBox() {
         res.json().then(r => {
           if (r.success) {
             Message.success("Delete success")
+            setFileList(files)
           } else {
             Message.error("Delete failed")
           }
@@ -123,6 +130,7 @@ function TweetBox() {
 
         <div className="tweetbox__picture">
           <Upload
+            fileList={fileList}
             multiple
             listType="picture-card"
             limit={4}
@@ -139,6 +147,13 @@ function TweetBox() {
             name="image"
             onExceedLimit={() => Message.info("You can upload up to 4 images")}
             onRemove={onRemove}
+            onProgress={(file) => {
+              setFileList(v => {
+                return v.map(x => {
+                  return x.uid === file.uid ? file : x
+                })
+              })
+            }}
           />
         </div>
         <div className="tweetbox__buttons">
