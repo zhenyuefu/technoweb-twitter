@@ -1,20 +1,27 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "../../style/TweetBox.css";
-import {Avatar, Button, Image, Input, Message, Upload,} from "@arco-design/web-react";
-import {UploadItem} from "@arco-design/web-react/es/Upload";
-import {addPost} from "../../utils/post";
-import {IImage} from "../../types";
-import {IconUser} from "@arco-design/web-react/icon";
-import useSWR, {useSWRConfig} from "swr";
-import {fetcher} from "../../utils/utils";
-import {useRecoilValue} from "recoil";
-import {authAtom} from "../../context/auth";
+import {
+  Avatar,
+  Button,
+  Image,
+  Input,
+  Message,
+  Upload,
+} from "@arco-design/web-react";
+import { UploadItem } from "@arco-design/web-react/es/Upload";
+import { addPost } from "../../utils/post";
+import { IImage } from "../../types";
+import { IconUser } from "@arco-design/web-react/icon";
+import useSWR, { useSWRConfig } from "swr";
+import { fetcher } from "../../utils/utils";
+import { useRecoilValue } from "recoil";
+import { authAtom } from "../../context/auth";
 
 function TweetBox() {
   const user = useRecoilValue(authAtom);
 
-  const {mutate} = useSWRConfig();
-  const {data} = useSWR(
+  const { mutate } = useSWRConfig();
+  const { data } = useSWR(
     `/api/user/profile?username=${user.username}`,
     fetcher
   );
@@ -103,19 +110,19 @@ function TweetBox() {
         onVisibleChange={visibleChange}
       />
 
-      <div style={{paddingTop: "4px", marginRight: "12px"}}>
+      <div style={{ paddingTop: "4px", marginRight: "12px" }}>
         <Avatar>
           {data?.user?.avatar ? (
-            <img src={data?.user?.avatar} alt={user.username}/>
+            <img src={data?.user?.avatar} alt={user.username} />
           ) : (
-            <IconUser/>
+            <IconUser />
           )}
         </Avatar>
       </div>
       <div className="tweetbox__input">
         <Input.TextArea
           placeholder="What's happening?"
-          autoSize={{minRows: 2, maxRows: 6}}
+          autoSize={{ minRows: 2, maxRows: 6 }}
           maxLength={500}
           showWordLimit
           style={{

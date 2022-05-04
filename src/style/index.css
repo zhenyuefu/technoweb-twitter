@@ -1,9 +1,9 @@
 body {
-  margin: 0;
-  --twitter-color: #1da1f2;
-  --twitter-background-color: var(--color-bg-1);
-  --twitter-border-color: var(--color-border);
-  --button-background-color: #e8f5fe;
-  background-color: var(--color-bg-1);
-  color: var(--color-text-1);
+    margin: 0;
+    --twitter-color: #1da1f2;
+    --twitter-background-color: var(--color-bg-1);
+    --twitter-border-color: var(--color-border);
+    --button-background-color: #e8f5fe;
+    background-color: var(--color-bg-1);
+    color: var(--color-text-1);
 }

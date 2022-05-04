@@ -1,12 +1,19 @@
 import React from "react";
 import "../../style/Sidebar.css";
-import {IconEmail, IconHome, IconNotification, IconSearch, IconTwitter, IconUser,} from "@arco-design/web-react/icon";
-import {Button, Grid} from "@arco-design/web-react";
+import {
+  IconEmail,
+  IconHome,
+  IconNotification,
+  IconSearch,
+  IconTwitter,
+  IconUser,
+} from "@arco-design/web-react/icon";
+import { Button, Grid } from "@arco-design/web-react";
 import SidebarOption from "./SidebarOption";
-import {useViewport} from "../../context/viewportContext";
-import {NavLink} from "react-router-dom";
-import {useRecoilValue} from "recoil";
-import {authAtom} from "../../context/auth";
+import { useViewport } from "../../context/viewportContext";
+import { NavLink } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { authAtom } from "../../context/auth";
 import SidebarUser from "./SidebarUser";
 
 const navlinkStyle = {
@@ -18,7 +25,7 @@ const Row = Grid.Row;
 
 function Sidebar() {
   const breakpoint = 768;
-  const {width} = useViewport();
+  const { width } = useViewport();
   const auth = useRecoilValue(authAtom);
 
   const username = auth.username || "";
@@ -33,29 +40,29 @@ function Sidebar() {
     >
       <div
         className="sidebar__top"
-        style={{alignItems: width < breakpoint ? "center" : "flex-start"}}
+        style={{ alignItems: width < breakpoint ? "center" : "flex-start" }}
       >
-        <IconTwitter className="sidebar__twitter-icon"/>
+        <IconTwitter className="sidebar__twitter-icon" />
 
         <NavLink to="/home" style={navlinkStyle}>
-          {({isActive}) => (
-            <SidebarOption active={isActive} Icon={IconHome} text="Home"/>
+          {({ isActive }) => (
+            <SidebarOption active={isActive} Icon={IconHome} text="Home" />
           )}
         </NavLink>
         <NavLink to="/search" style={navlinkStyle}>
-          <SidebarOption Icon={IconSearch} text="Search"/>
+          <SidebarOption Icon={IconSearch} text="Search" />
         </NavLink>
-        <SidebarOption Icon={IconNotification} text="Notifications"/>
-        <SidebarOption Icon={IconEmail} text="Messages"/>
+        <SidebarOption Icon={IconNotification} text="Notifications" />
+        <SidebarOption Icon={IconEmail} text="Messages" />
         <NavLink to={username} style={navlinkStyle}>
-          <SidebarOption Icon={IconUser} text="Profile"/>
+          <SidebarOption Icon={IconUser} text="Profile" />
         </NavLink>
         {width < breakpoint ? (
           <Button
             className="sidebar__round-button"
             shape="round"
             type="primary"
-            icon={<iconpark-icon name="tweet" size={"28px"}/>}
+            icon={<iconpark-icon name="tweet" size={"28px"} />}
           />
         ) : (
           <Button className="sidebar__button" type="primary">
