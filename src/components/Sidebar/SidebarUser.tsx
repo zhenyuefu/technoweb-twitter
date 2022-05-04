@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 import { useViewport } from "../../context/viewportContext";
 import { fetcher } from "../../utils/utils";
@@ -20,6 +20,14 @@ function SidebarUser({ username }: Props) {
   const navigate = useNavigate();
   const setAuth = useSetRecoilState(authAtom);
   const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (darkMode) {
+      document.body.setAttribute("arco-theme", "dark");
+    } else {
+      document.body.removeAttribute("arco-theme");
+    }
+  }, [darkMode]);
 
   const onLogout = async () => {
     try {
@@ -90,11 +98,6 @@ function SidebarUser({ username }: Props) {
         key="3"
         onClick={() => {
           setDarkMode(!darkMode);
-          if (darkMode) {
-            document.body.setAttribute("arco-theme", "dark");
-          } else {
-            document.body.removeAttribute("arco-theme");
-          }
         }}
       >
         {darkMode ? <IconMoon /> : <IconSun />}
