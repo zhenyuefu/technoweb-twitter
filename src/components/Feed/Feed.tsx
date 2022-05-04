@@ -5,12 +5,10 @@ import TweetBox from "./TweetBox";
 import useSWR from "swr";
 import {fetcher} from "../../utils/utils";
 import {IPost} from "../../types";
-
+import {Empty, Skeleton} from "@arco-design/web-react";
 
 function Feed() {
-
-  const {data, isValidating} = useSWR("/api/post", fetcher);
-
+  const {data} = useSWR("/api/post", fetcher);
 
   return (
     <div className="feed">
@@ -19,9 +17,13 @@ function Feed() {
       </div>
       <TweetBox/>
       <div className="line" style={{paddingTop: "12px"}}></div>
-      {data && data.map((post: IPost) => (
-        <Post post={post} key={post._id}/>
-      ))}
+      <Skeleton loading={!data} image animation>
+        {data && data.length > 0 ? (
+          data.map((post: IPost) => <Post post={post} key={post._id}/>)
+        ) : (
+          <Empty/>
+        )}
+      </Skeleton>
     </div>
   );
 }

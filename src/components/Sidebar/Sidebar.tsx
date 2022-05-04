@@ -9,68 +9,66 @@ import {useRecoilValue} from "recoil";
 import {authAtom} from "../../context/auth";
 import SidebarUser from "./SidebarUser";
 
-
 const navlinkStyle = {
-    textDecoration: "none",
-    color: "black",
+  textDecoration: "none",
+  color: "inherit",
 };
 
 const Row = Grid.Row;
 
-
 function Sidebar() {
-    const breakpoint = 768;
-    const {width} = useViewport();
-    const auth = useRecoilValue(authAtom);
+  const breakpoint = 768;
+  const {width} = useViewport();
+  const auth = useRecoilValue(authAtom);
 
-    const username = auth.username || "";
+  const username = auth.username || "";
 
-
-    return (
+  return (
+    <div
+      className="sidebar"
+      style={{
+        paddingLeft: width < breakpoint ? "4px" : "12px",
+        paddingRight: width < breakpoint ? "4px" : "12px",
+      }}
+    >
       <div
-        className="sidebar"
-        style={{
-            paddingLeft: width < breakpoint ? "4px" : "12px",
-            paddingRight: width < breakpoint ? "4px" : "12px",
-        }}
+        className="sidebar__top"
+        style={{alignItems: width < breakpoint ? "center" : "flex-start"}}
       >
-          <div
-            className="sidebar__top"
-            style={{alignItems: width < breakpoint ? "center" : "flex-start"}}
-          >
-              <IconTwitter className="sidebar__twitter-icon"/>
+        <IconTwitter className="sidebar__twitter-icon"/>
 
-              <NavLink to="/home" style={navlinkStyle}>
-                  {({isActive}) => (
-                    <SidebarOption active={isActive} Icon={IconHome} text="Home"/>
-                  )}
-              </NavLink>
-              <NavLink to="/search" style={navlinkStyle}>
-                  <SidebarOption Icon={IconSearch} text="Search"/>
-              </NavLink>
-              <SidebarOption Icon={IconNotification} text="Notifications"/>
-              <SidebarOption Icon={IconEmail} text="Messages"/>
-              <NavLink to={username} style={navlinkStyle}>
-                  <SidebarOption Icon={IconUser} text="Profile"/>
-              </NavLink>
-              {width < breakpoint ? (
-                <Button
-                  className="sidebar__round-button"
-                  shape="round"
-                  icon={<iconpark-icon name="tweet" size={"28px"}/>}
-                />
-              ) : (
-                <Button className="sidebar__button" type="outline">
-                    <span>TWEET</span>
-                </Button>
-              )}
-          </div>
-
-          <Row className="sidebar__down">
-              <SidebarUser username={username}></SidebarUser>
-          </Row>
+        <NavLink to="/home" style={navlinkStyle}>
+          {({isActive}) => (
+            <SidebarOption active={isActive} Icon={IconHome} text="Home"/>
+          )}
+        </NavLink>
+        <NavLink to="/search" style={navlinkStyle}>
+          <SidebarOption Icon={IconSearch} text="Search"/>
+        </NavLink>
+        <SidebarOption Icon={IconNotification} text="Notifications"/>
+        <SidebarOption Icon={IconEmail} text="Messages"/>
+        <NavLink to={username} style={navlinkStyle}>
+          <SidebarOption Icon={IconUser} text="Profile"/>
+        </NavLink>
+        {width < breakpoint ? (
+          <Button
+            className="sidebar__round-button"
+            shape="round"
+            type="primary"
+            icon={<iconpark-icon name="tweet" size={"28px"}/>}
+          />
+        ) : (
+          <Button className="sidebar__button" type="primary">
+            <span>TWEET</span>
+          </Button>
+        )}
       </div>
-    );
+
+      <Row className="sidebar__down">
+        <SidebarUser username={username}></SidebarUser>
+      </Row>
+    </div>
+  );
 }
 
 export default Sidebar;
