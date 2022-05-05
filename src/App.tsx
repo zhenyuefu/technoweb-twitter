@@ -1,9 +1,9 @@
-import React, {Suspense} from "react";
+import React, { Suspense } from "react";
 
-import {Navigate, Route, Routes} from "react-router-dom";
-import {useRecoilValue} from "recoil";
-import {authAtom} from "./context/auth";
-import {LoadingPage} from "./components/Loading/LoadingPage";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { authAtom } from "./context/auth";
+import { LoadingPage } from "./components/Loading/LoadingPage";
 
 // import Feed from "./components/Feed/Feed";
 const Feed = React.lazy(() => import("./components/Feed/Feed"));
@@ -16,18 +16,17 @@ const Signup = React.lazy(() => import("./pages/Auth/Signup"));
 // import Home from "./pages/Home";
 const Home = React.lazy(() => import("./pages/Home"));
 
-
 function App() {
-
   return (
     <div className="app">
-      <Suspense fallback={<LoadingPage/>}>
+      <Suspense fallback={<LoadingPage />}>
         <Routes>
+          <Route path="/" element={<Navigate to="home" />} />
           <Route
             path="/*"
             element={
               <RequiredAuth redirectTo="/i/flow/login">
-                <Home/>
+                <Home />
               </RequiredAuth>
             }
           >
