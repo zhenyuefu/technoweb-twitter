@@ -9,3 +9,12 @@
   justify-content: center;
   margin-top: 0;
 }
+
+.main__header {
+  top: 0;
+  position: sticky;
+  z-index: 3;
+  /* border: 1px solid var(--twitter-border-color); */
+  padding: 15px 20px;
+  background-color: var(--color-bg-3);
+}

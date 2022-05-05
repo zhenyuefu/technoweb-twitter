@@ -12,7 +12,7 @@ function Feed() {
 
   return (
     <div className="feed">
-      <div className="feed__header">
+      <div className="main__header">
         <h2 style={{ margin: 0, fontFamily: "inherit" }}>Home</h2>
       </div>
       <TweetBox />
