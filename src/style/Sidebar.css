@@ -28,9 +28,8 @@
 
 .sidebar__twitter-icon {
     margin: 12px;
-
     font-size: 30px !important;
-    color: var(--twitter-color);
+    color: var(--twitter-color) !important;
 }
 
 .sidebar__button {

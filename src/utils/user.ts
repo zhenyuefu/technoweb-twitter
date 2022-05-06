@@ -80,3 +80,27 @@ export async function checkEmail(email: string) {
   }
   return Promise.reject(new Error("This email already registered"));
 }
+
+export async function follow(uid: string) {
+  const res = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/api/user/follow/${uid}`,
+    {
+      method: "PATCH",
+      mode: "cors",
+      credentials: "include",
+    }
+  );
+  return handleResponse(res);
+}
+
+export async function unfollow(uid: string) {
+  const res = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/api/user/unfollow/${uid}`,
+    {
+      method: "PATCH",
+      mode: "cors",
+      credentials: "include",
+    }
+  );
+  return handleResponse(res);
+}

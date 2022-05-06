@@ -1,13 +1,20 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 
-import {useSetRecoilState} from "recoil";
-import {Link, useNavigate} from "react-router-dom";
-import {Button, Checkbox, Form, Input, Message, Typography} from "@arco-design/web-react";
-import {Login as LoginIcon} from "@icon-park/react"
+import { useSetRecoilState } from "recoil";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  Button,
+  Checkbox,
+  Form,
+  Input,
+  Message,
+  Typography,
+} from "@arco-design/web-react";
+import { Login as LoginIcon } from "@icon-park/react";
 
-import {authAtom} from "../../context/auth";
-import {login} from "../../utils/auth";
-import {IFormLogin} from "../../types";
+import { authAtom } from "../../context/auth";
+import { login } from "../../utils/user";
+import { IFormLogin } from "../../types";
 
 function Login() {
   const [form] = Form.useForm();
@@ -35,14 +42,15 @@ function Login() {
 
   return (
     <div>
-      <div style={{
-        marginTop: "100px",
-        justifyContent: "center",
-        alignItems: "center",
-        display: "flex",
-      }
-      }>
-        <LoginIcon theme="outline" size="32" fill="#333"/>
+      <div
+        style={{
+          marginTop: "100px",
+          justifyContent: "center",
+          alignItems: "center",
+          display: "flex",
+        }}
+      >
+        <LoginIcon theme="outline" size="32" fill="#333" />
       </div>
 
       <div
@@ -54,73 +62,66 @@ function Login() {
         }}
       >
         <Typography>
-          <Typography.Title heading={5}>
-            Sign In
-          </Typography.Title>
+          <Typography.Title heading={5}>Sign In</Typography.Title>
         </Typography>
       </div>
 
-      <div style={{
-        display: 'flex',
-        alignItems: "center",
-        justifyContent: "center",
-      }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <Form
           form={form}
-          layout='vertical'
-          style={{maxWidth: 380}}
+          layout="vertical"
+          style={{ maxWidth: 380 }}
           scrollToFirstError
           onSubmit={onSubmit}
           disabled={isFetching}
-          size='large'
+          size="large"
         >
-          <Form.Item label='Email' field='email' hasFeedback={true}
-                     rules={[{required: true, message: 'Email is required'}]}>
-            <Input placeholder='please enter your email'/>
+          <Form.Item
+            label="Email"
+            field="email"
+            hasFeedback={true}
+            rules={[{ required: true, message: "Email is required" }]}
+          >
+            <Input placeholder="please enter your email" />
           </Form.Item>
           <Form.Item
-            label='Password'
-            field='password'
+            label="Password"
+            field="password"
             hasFeedback
-            rules={[{required: true, message: 'Password is required'}]}
+            rules={[{ required: true, message: "Password is required" }]}
           >
-            <Input.Password placeholder='please enter your password'/>
+            <Input.Password placeholder="please enter your password" />
           </Form.Item>
-          <Form.Item
-            field='remember'
-
-          >
+          <Form.Item field="remember">
             <Checkbox>Remember me</Checkbox>
-
           </Form.Item>
-          <Form.Item
-          >
-            <Button
-              type='primary' htmlType='submit' long
-              loading={isFetching}
-            >
+          <Form.Item>
+            <Button type="primary" htmlType="submit" long loading={isFetching}>
               Login
             </Button>
           </Form.Item>
         </Form>
       </div>
 
-      <div style={{
-        display: 'flex',
-        margin: "auto",
-        width: 360,
-        justifyContent: "flex-end"
-      }}>
-
-
+      <div
+        style={{
+          display: "flex",
+          margin: "auto",
+          width: 360,
+          justifyContent: "flex-end",
+        }}
+      >
         <Typography>
           <Typography.Text>
-            <Link to="/i/flow/signup">
-              {"Don't have an account? Sign Up"}
-            </Link>
+            <Link to="/i/flow/signup">{"Don't have an account? Sign Up"}</Link>
           </Typography.Text>
         </Typography>
-
       </div>
     </div>
   );

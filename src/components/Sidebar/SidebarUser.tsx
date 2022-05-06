@@ -4,7 +4,7 @@ import { useViewport } from "../../context/viewportContext";
 import { fetcher } from "../../utils/utils";
 import { Avatar, Dropdown, Menu, Notification } from "@arco-design/web-react";
 import { IconMoon, IconSun, IconUser } from "@arco-design/web-react/icon";
-import { logout } from "../../utils/auth";
+import { logout } from "../../utils/user";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { authAtom } from "../../context/auth";
@@ -110,9 +110,9 @@ function SidebarUser({ username }: Props) {
     <Dropdown
       droplist={dropList}
       trigger="click"
-      unmountOnExit={false}
+      position="top"
       getPopupContainer={(triggerNode) =>
-        triggerNode.parentElement || document.body
+        triggerNode.parentElement as HTMLElement
       }
     >
       <div className="sidebar__user">

@@ -3,13 +3,20 @@ import { Link, useParams } from "react-router-dom";
 import useSWR from "swr";
 import { fetcher } from "../../utils/utils";
 import "../../style/Profile.css";
-import { Avatar, Button, Image } from "@arco-design/web-react";
+import { Avatar, Button, Image, Message } from "@arco-design/web-react";
 import { IconUser } from "@arco-design/web-react/icon";
 import { CalendarDot } from "@icon-park/react";
+import { useRecoilValue } from "recoil";
+import { authAtom } from "../../context/auth";
+import { follow, unfollow } from "../../utils/user";
 
 function Profile() {
+  const user = useRecoilValue(authAtom);
   const { username } = useParams();
-  const { data } = useSWR(`/api/user/profile?username=${username}`, fetcher);
+  const { data, mutate } = useSWR(
+    `/api/user/profile?username=${username}`,
+    fetcher
+  );
 
   return (
     <div className="profile">
@@ -42,9 +49,33 @@ function Profile() {
               </Avatar>
             </div>
             <div className="profile__buttons">
-              <Button shape="round" size="large">
-                Set up profile
-              </Button>
+              {user?.username === username ? (
+                <Button shape="round" size="large">
+                  Set up profile
+                </Button>
+              ) : (
+                <Button
+                  shape="round"
+                  size="large"
+                  onClick={async () => {
+                    try {
+                      if (data?.user?.followers?.includes(user.uid)) {
+                        await unfollow(data?.user?._id);
+                        await mutate();
+                      } else {
+                        await follow(data?.user?._id);
+                        await mutate();
+                      }
+                    } catch (e) {
+                      Message.error((e as Error).message);
+                    }
+                  }}
+                >
+                  {data?.user?.followers?.includes(user.uid)
+                    ? "Unfollow"
+                    : "Follow"}
+                </Button>
+              )}
             </div>
           </div>
           <h4 style={{ margin: 0, fontFamily: "inherit" }}>
