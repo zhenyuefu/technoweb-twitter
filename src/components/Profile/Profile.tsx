@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import useSWR from "swr";
 import { fetcher } from "../../utils/utils";
 import "../../style/Profile.css";
@@ -63,6 +63,24 @@ function Profile() {
                 })}
               </p>
             </div>
+          </div>
+          <div className="profile__friends">
+            <Link to={`/${data?.user?.username}/following`}>
+              <div className="profile__friends_field">
+                <span style={{ fontWeight: "bold" }}>
+                  {data?.user?.following?.length || 0}{" "}
+                </span>
+                <span style={{ color: "var(--color-text-3)" }}>Following</span>
+              </div>
+            </Link>
+            <Link to={`/${data?.user?.username}/followers`}>
+              <div className="profile__friends_field">
+                <span style={{ fontWeight: "bold" }}>
+                  {data?.user?.followers?.length || 0}{" "}
+                </span>
+                <span style={{ color: "var(--color-text-3)" }}>Followers</span>
+              </div>
+            </Link>
           </div>
         </div>
       </div>

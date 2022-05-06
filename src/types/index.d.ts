@@ -22,44 +22,41 @@ export interface IFormLogin {
 
 export interface IFormPost {
   content: string;
-  images: any[];
+  images: IImage[];
 }
 
 export interface IImage {
   account_id?: number;
   account_url?: string;
-  ad_type?: number
-  ad_url?: string
-  animated?: boolean
-  bandwidth?: number
-  datetime?: number
-  deletehash: string
-  description?: string
-  edited?: string
-  favorite?: boolean
-  has_sound?: boolean
-  height: number
-  id: string
-  in_gallery?: boolean
-  in_most_viral?: boolean
-  is_ad?: boolean
-  link: string
-  name: string
-  nsfw?: any
-  section?: any
-  size: number
-  tags?: []
-  title?: string
-  type?: string
-  views?: number
-  vote?: any
-  width: number
+  ad_type?: number;
+  ad_url?: string;
+  animated?: boolean;
+  bandwidth?: number;
+  datetime?: number;
+  deletehash: string;
+  description?: string;
+  edited?: string;
+  favorite?: boolean;
+  has_sound?: boolean;
+  height: number;
+  id: string;
+  in_gallery?: boolean;
+  in_most_viral?: boolean;
+  is_ad?: boolean;
+  link: string;
+  name: string;
+  size: number;
+  tags?: string[];
+  title?: string;
+  type?: string;
+  views?: number;
+  width: number;
 }
 
 interface IUser {
-  _id: string;
-  email: string;
-  username: string;
+  _id?: string;
+  email?: string;
+  username?: string;
   firstName?: string;
   lastName?: string;
   updatedAt?: Date;
@@ -77,9 +74,14 @@ interface IPost {
   comments?: IComment[];
   likes?: IUser[];
   countLikes: number;
-  reTweet?: any[];
+  reTweet?: IPost[];
   countReTweet: number;
   isDelete: boolean;
+}
+
+export interface ISearchResults {
+  users: IUser[];
+  posts: IPost[];
 }
 
 /**
@@ -119,9 +121,9 @@ interface IPost {
 declare global {
   interface IconParkIconAttributes<T> extends React.HTMLAttributes<T> {
     // 包含打包的图标id
-    'icon-id'?: '57' | '58' | '59' | '61' | '62' | '63';
+    "icon-id"?: "57" | "58" | "59" | "61" | "62" | "63";
     // 包含打包的图标标识
-    name?: 'tweet' | 'icon-name2' | 'icon-name3' | 'icon-name4';
+    name?: "tweet" | "icon-name2" | "icon-name3" | "icon-name4";
     size?: string;
     width?: string;
     height?: string;
@@ -134,7 +136,10 @@ declare global {
 
   namespace JSX {
     interface IntrinsicElements {
-      'iconpark-icon': React.DetailedHTMLProps<IconParkIconAttributes<HTMLElement>, HTMLElement>;
+      "iconpark-icon": React.DetailedHTMLProps<
+        IconParkIconAttributes<HTMLElement>,
+        HTMLElement
+      >;
     }
   }
 }

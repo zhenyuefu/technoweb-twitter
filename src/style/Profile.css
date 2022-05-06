@@ -49,3 +49,22 @@
 .profile__icons svg {
   color: var(--color-text-3);
 }
+
+.profile__friends {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.profile__friends_field {
+  margin-right: 20px;
+  color: var(--color-text-1);
+}
+
+.profile__friends > a {
+  text-decoration: none;
+}
+
+.profile__friends > a:hover {
+  text-decoration: underline var(--color-text-1);
+}

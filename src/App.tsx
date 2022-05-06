@@ -4,7 +4,8 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { authAtom } from "./context/auth";
 import { LoadingPage } from "./components/Loading/LoadingPage";
-
+// import Search from "./components/Search/Search";
+const Search = React.lazy(() => import("./components/Search/Search"));
 // import Feed from "./components/Feed/Feed";
 const Feed = React.lazy(() => import("./components/Feed/Feed"));
 // import Profile from "./components/Profile/Profile";
@@ -32,9 +33,24 @@ function App() {
           >
             <Route path="home" element={<Feed />} />
             <Route path=":username" element={<Profile />} />
+            <Route path="search" element={<Search />} />
           </Route>
-          <Route path="/i/flow/login" element={<Login />} />
-          <Route path="/i/flow/signup" element={<Signup />} />
+          <Route
+            path="/i/flow/login"
+            element={
+              <IsLoggedIn redirectTo="/home">
+                <Login />
+              </IsLoggedIn>
+            }
+          />
+          <Route
+            path="/i/flow/signup"
+            element={
+              <IsLoggedIn redirectTo="/home">
+                <Signup />
+              </IsLoggedIn>
+            }
+          />
         </Routes>
       </Suspense>
     </div>
@@ -49,6 +65,11 @@ type RequiredAuthProps = {
 function RequiredAuth({ children, redirectTo }: RequiredAuthProps) {
   const auth = useRecoilValue(authAtom);
   return auth.auth ? children : <Navigate to={redirectTo} />;
+}
+
+function IsLoggedIn({ children, redirectTo }: RequiredAuthProps) {
+  const auth = useRecoilValue(authAtom);
+  return auth.auth ? <Navigate to={redirectTo} /> : children;
 }
 
 export default App;

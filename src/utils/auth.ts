@@ -1,5 +1,5 @@
-import {IFormLogin, IFormRegister} from "../types";
-import {handleResponse} from "./utils";
+import { IFormLogin, IFormRegister } from "../types";
+import { handleResponse } from "./utils";
 
 export async function login(data: IFormLogin) {
   const res = await fetch(
@@ -18,19 +18,18 @@ export async function login(data: IFormLogin) {
 }
 
 export async function logout() {
-  try {
-    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/logout`, {
+  const res = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/api/auth/logout`,
+    {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       credentials: "include",
       mode: "cors",
-    })
-    return handleResponse(res);
-  } catch (error) {
-    console.log(error);
-  }
+    }
+  );
+  return handleResponse(res);
 }
 
 export async function register(data: IFormRegister) {
@@ -63,7 +62,6 @@ export async function checkUsername(username: string) {
     return Promise.resolve("Username not exists");
   }
   return Promise.reject(new Error("This username already exists"));
-
 }
 
 export async function checkEmail(email: string) {

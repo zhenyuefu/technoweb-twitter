@@ -39,7 +39,7 @@ function TweetBox() {
       images: imgInfos,
     })
       .then((r) => {
-        Message.info(r.message);
+        Message.success(r.message);
         setLoading(false);
         setText("");
         setFileList([]);

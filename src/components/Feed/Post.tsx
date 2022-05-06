@@ -1,35 +1,51 @@
 import React from "react";
 import "../../style/Post.css";
-import {IconUser} from "@arco-design/web-react/icon";
-import {Avatar, Button, Comment, Image, Input, Message,} from "@arco-design/web-react";
-import {Comments, ShareTwo, ThumbsUp} from "@icon-park/react";
-import {useViewport} from "../../context/viewportContext";
-import {IPost} from "../../types";
-import {useRecoilValue} from "recoil";
-import {authAtom} from "../../context/auth";
-import useSWR, {useSWRConfig} from "swr";
-import {fetcher} from "../../utils/utils";
-import {addComment} from "../../utils/post";
+import { IconUser } from "@arco-design/web-react/icon";
+import {
+  Avatar,
+  Button,
+  Comment,
+  Image,
+  Input,
+  Message,
+} from "@arco-design/web-react";
+import { Comments, ShareTwo, ThumbsUp } from "@icon-park/react";
+import { useViewport } from "../../context/viewportContext";
+import { IPost } from "../../types";
+import { useRecoilValue } from "recoil";
+import { authAtom } from "../../context/auth";
+import useSWR, { useSWRConfig } from "swr";
+import { fetcher } from "../../utils/utils";
+import { addComment } from "../../utils/post";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   post: IPost;
 };
 
-function Post({post}: Props) {
+function Post({ post }: Props) {
+  const navigate = useNavigate();
+
   //user
   const user = useRecoilValue(authAtom);
 
-  const {mutate} = useSWRConfig();
-  const {data} = useSWR(
+  const { mutate } = useSWRConfig();
+  const { data } = useSWR(
     `/api/user/profile?username=${user.username}`,
     fetcher
   );
 
   //post
-  const {author, imagePath, comments, content, countLikes, countReTweet} =
-    post;
+  const {
+    author,
+    imagePath,
+    comments,
+    content,
+    countLikes,
+    countReTweet,
+  } = post;
   const displayname = `${author.firstName} ${author.lastName}`;
-  const {width: windowWidth} = useViewport();
+  const { width: windowWidth } = useViewport();
   const width =
     windowWidth < 645 ? "80%" : imagePath && imagePath?.length > 1 ? 200 : 400;
   const height = imagePath && imagePath?.length > 1 ? 150 : 300;
@@ -70,7 +86,7 @@ function Post({post}: Props) {
             strokeWidth={3}
           />
         ) : (
-          <Comments theme="outline" size="21" strokeWidth={3}/>
+          <Comments theme="outline" size="21" strokeWidth={3} />
         )}
         Reply
       </span>
@@ -80,9 +96,9 @@ function Post({post}: Props) {
         onClick={() => setLike(!like)}
       >
         {like ? (
-          <ThumbsUp theme="filled" size="21" fill="#FBE842" strokeWidth={3}/>
+          <ThumbsUp theme="filled" size="21" fill="#FBE842" strokeWidth={3} />
         ) : (
-          <ThumbsUp theme="outline" size="21" strokeWidth={3}/>
+          <ThumbsUp theme="outline" size="21" strokeWidth={3} />
         )}{" "}
         {countLikes + (like ? 1 : 0)}
       </span>
@@ -92,9 +108,9 @@ function Post({post}: Props) {
         onClick={() => setRe(!re)}
       >
         {re ? (
-          <ShareTwo theme="filled" size="21" fill="#2f88ff" strokeWidth={3}/>
+          <ShareTwo theme="filled" size="21" fill="#2f88ff" strokeWidth={3} />
         ) : (
-          <ShareTwo theme="outline" size="21" strokeWidth={3}/>
+          <ShareTwo theme="outline" size="21" strokeWidth={3} />
         )}{" "}
         {countReTweet + (re ? 1 : 0)}
       </span>
@@ -151,17 +167,21 @@ function Post({post}: Props) {
           width: "100%",
         }}
         avatar={
-          <Avatar>
+          <Avatar
+            onClick={() => {
+              navigate(`/${author.username}`);
+            }}
+          >
             {author.avatar ? (
-              <img src={author.avatar} alt={author.username}/>
+              <img src={author.avatar} alt={author.username} />
             ) : (
-              <IconUser/>
+              <IconUser />
             )}
           </Avatar>
         }
         author={
           <div className="post__header">
-            <h5 style={{margin: 0, marginRight: 4}}>{displayname}</h5>
+            <h5 style={{ margin: 0, marginRight: 4 }}>{displayname}</h5>
             <span>@{author.username}</span>
           </div>
         }
@@ -180,7 +200,7 @@ function Post({post}: Props) {
                       alt={`image${index + 1}`}
                       loader
                       loading="lazy"
-                      style={{margin: 5, borderRadius: 20}}
+                      style={{ margin: 5, borderRadius: 20 }}
                     />
                   ))}
               </Image.PreviewGroup>
@@ -201,14 +221,14 @@ function Post({post}: Props) {
                       alt={comment.author.username}
                     />
                   ) : (
-                    <IconUser/>
+                    <IconUser />
                   )}
                 </Avatar>
               }
               author={
                 <div className="post__header">
                   <h5
-                    style={{margin: 0, marginRight: 4}}
+                    style={{ margin: 0, marginRight: 4 }}
                   >{`${comment.author.firstName} ${comment.author.lastName}`}</h5>
                   <span>@{comment.author.username}</span>
                 </div>
@@ -235,9 +255,9 @@ function Post({post}: Props) {
             avatar={
               <Avatar>
                 {data?.user?.avatar ? (
-                  <img src={data?.user?.avatar} alt={user.username}/>
+                  <img src={data?.user?.avatar} alt={user.username} />
                 ) : (
-                  <IconUser/>
+                  <IconUser />
                 )}
               </Avatar>
             }
@@ -245,7 +265,7 @@ function Post({post}: Props) {
               <div>
                 <Input.TextArea
                   placeholder="Add a comment"
-                  autoSize={{minRows: 2, maxRows: 6}}
+                  autoSize={{ minRows: 2, maxRows: 6 }}
                   maxLength={500}
                   showWordLimit
                   style={{
