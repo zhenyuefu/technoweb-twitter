@@ -11,7 +11,7 @@ import {
 import { Button, Grid } from "@arco-design/web-react";
 import SidebarOption from "./SidebarOption";
 import { useViewport } from "../../context/viewportContext";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { authAtom } from "../../context/auth";
 import SidebarUser from "./SidebarUser";
@@ -27,6 +27,10 @@ function Sidebar() {
   const breakpoint = 768;
   const { width } = useViewport();
   const auth = useRecoilValue(authAtom);
+  const navigate = useNavigate();
+  const onTweet = () => {
+    navigate("/home");
+  };
 
   const username = auth.username || "";
 
@@ -62,10 +66,11 @@ function Sidebar() {
             className="sidebar__round-button"
             shape="round"
             type="primary"
+            onClick={onTweet}
             icon={<iconpark-icon name="tweet" size={"28px"} />}
           />
         ) : (
-          <Button className="sidebar__button" type="primary">
+          <Button className="sidebar__button" type="primary" onClick={onTweet}>
             <span>TWEET</span>
           </Button>
         )}

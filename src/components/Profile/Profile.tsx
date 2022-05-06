@@ -30,7 +30,7 @@ function Profile() {
     fetcher
   );
   const { data: posts, error: perror } = useSWR(
-    `/api/post?author=${user.uid}`,
+    () => "/api/post?author=" + data.user.id,
     fetcher
   );
 
