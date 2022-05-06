@@ -4,6 +4,10 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { authAtom } from "./context/auth";
 import { LoadingPage } from "./components/Loading/LoadingPage";
+// import NoMatch from "./components/NoMatch";
+const NoMatch = React.lazy(() => import("./components/NoMatch"));
+// import Follow from "./components/Profile/Follow";
+const Follow = React.lazy(() => import("./components/Profile/Follow"));
 // import Search from "./components/Search/Search";
 const Search = React.lazy(() => import("./components/Search/Search"));
 // import Feed from "./components/Feed/Feed";
@@ -24,7 +28,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="home" />} />
           <Route
-            path="/*"
+            path="/"
             element={
               <RequiredAuth redirectTo="/i/flow/login">
                 <Home />
@@ -33,7 +37,16 @@ function App() {
           >
             <Route path="home" element={<Feed />} />
             <Route path=":username" element={<Profile />} />
+            <Route
+              path=":username/following"
+              element={<Follow keys="following" />}
+            />
+            <Route
+              path=":username/followers"
+              element={<Follow keys="followers" />}
+            />
             <Route path="search" element={<Search />} />
+            <Route path="*" element={<NoMatch />} />
           </Route>
           <Route
             path="/i/flow/login"

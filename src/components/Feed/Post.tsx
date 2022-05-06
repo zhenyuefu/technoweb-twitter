@@ -37,7 +37,10 @@ function Post({ post }: Props) {
   );
 
   if (error) {
-    Notification.error(error.message);
+    Notification.error({
+      title: "Error",
+      content: error.message,
+    });
   }
 
   //post
@@ -49,7 +52,7 @@ function Post({ post }: Props) {
     countLikes,
     countReTweet,
   } = post;
-  const displayname = `${author.firstName} ${author.lastName}`;
+  const displayname = `${author?.firstName} ${author?.lastName}`;
   const { width: windowWidth } = useViewport();
   const width =
     windowWidth < 645 ? "80%" : imagePath && imagePath?.length > 1 ? 200 : 400;
@@ -174,11 +177,11 @@ function Post({ post }: Props) {
         avatar={
           <Avatar
             onClick={() => {
-              navigate(`/${author.username}`);
+              navigate(`/${author?.username}`);
             }}
           >
-            {author.avatar ? (
-              <img src={author.avatar} alt={author.username} />
+            {author?.avatar ? (
+              <img src={author?.avatar} alt={author?.username} />
             ) : (
               <IconUser />
             )}
@@ -187,7 +190,7 @@ function Post({ post }: Props) {
         author={
           <div className="post__header">
             <h5 style={{ margin: 0, marginRight: 4 }}>{displayname}</h5>
-            <span>@{author.username}</span>
+            <span>@{author?.username}</span>
           </div>
         }
         content={

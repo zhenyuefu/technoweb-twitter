@@ -6,6 +6,7 @@ import {
   Empty,
   Input,
   Notification,
+  PageHeader,
   Skeleton,
 } from "@arco-design/web-react";
 
@@ -25,7 +26,10 @@ function Search() {
   );
 
   if (error) {
-    Notification.error(error.message);
+    Notification.error({
+      title: "Error",
+      content: error.message,
+    });
   }
 
   const handleSearch = (value: string) => {
@@ -35,7 +39,7 @@ function Search() {
   return (
     <div className="search">
       <div className="main__header">
-        <h2 style={{ margin: 0, fontFamily: "inherit" }}>Search </h2>
+        <PageHeader title="Search" backIcon onBack={() => history.back()} />
       </div>
       <AutoComplete
         style={{
@@ -69,7 +73,12 @@ function Search() {
         }}
         triggerElement={<Input.Search size="large" loading={isValidating} />}
       />
-      <Skeleton loading={!data} image animation>
+      <Skeleton
+        style={{ display: "flex", alignItems: "center", margin: 16 }}
+        loading={!data}
+        image={{ shape: "circle" }}
+        animation
+      >
         {data?.posts && data.posts.length > 0 ? (
           data.posts.map((post: IPost) => <Post post={post} key={post._id} />)
         ) : (

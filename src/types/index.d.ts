@@ -63,6 +63,14 @@ interface IUser {
   avatar?: string;
   introduction?: string;
   bgPicture?: string;
+  followers?: string[];
+  following?: string[];
+}
+
+interface IComment {
+  author: IUser;
+  content: string;
+  comments?: IComment[];
 }
 
 interface IPost {
@@ -84,6 +92,9 @@ export interface ISearchResults {
   posts: IPost[];
 }
 
+export interface IProfile {
+  user: IUser;
+}
 /**
  * if you are using DOM api directly
  * e.g.

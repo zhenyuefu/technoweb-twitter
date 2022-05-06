@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import "../../style/TweetBox.css";
 import {
@@ -27,7 +28,11 @@ function TweetBox() {
     fetcher
   );
 
-  if (error) Notification.error(error.message);
+  if (error)
+    Notification.error({
+      title: "Error",
+      content: error.message,
+    });
 
   const [disabled, setDisabled] = React.useState(false);
   const [loading, setLoading] = React.useState(false);

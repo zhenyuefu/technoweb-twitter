@@ -15,6 +15,41 @@
   position: sticky;
   z-index: 3;
   /* border: 1px solid var(--twitter-border-color); */
-  padding: 15px 20px;
+  /*padding: 15px 20px;*/
   background-color: var(--color-bg-3);
+}
+
+.feed {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid;
+  border-color: var(--color-border);
+  min-width: min-content;
+  overflow-y: scroll;
+  max-width: 650px;
+  position: relative;
+  align-items: stretch;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 20px;
+}
+
+.feed::-webkit-scrollbar {
+  display: none;
+}
+
+.posts {
+  display: flex;
+  flex-direction: column;
+  border-color: var(--color-border);
+  min-width: min-content;
+  overflow-y: scroll;
+  max-width: 650px;
+  position: relative;
+  align-items: stretch;
+  width: 100%;
+}
+
+.posts::-webkit-scrollbar {
+  display: none;
 }
