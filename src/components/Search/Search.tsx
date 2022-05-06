@@ -5,6 +5,7 @@ import {
   Avatar,
   Empty,
   Input,
+  Notification,
   Skeleton,
 } from "@arco-design/web-react";
 
@@ -18,10 +19,14 @@ import { useNavigate } from "react-router-dom";
 function Search() {
   const navigate = useNavigate();
   const [query, setQuery] = React.useState("");
-  const { data, isValidating } = useSWR<ISearchResults>(
+  const { data, isValidating, error } = useSWR<ISearchResults>(
     query ? `/api/search?text=${query}` : null,
     fetcher
   );
+
+  if (error) {
+    Notification.error(error.message);
+  }
 
   const handleSearch = (value: string) => {
     setQuery(value);

@@ -6,6 +6,7 @@ import {
   Image,
   Input,
   Message,
+  Notification,
   Upload,
 } from "@arco-design/web-react";
 import { UploadItem } from "@arco-design/web-react/es/Upload";
@@ -21,10 +22,12 @@ function TweetBox() {
   const user = useRecoilValue(authAtom);
 
   const { mutate } = useSWRConfig();
-  const { data } = useSWR(
+  const { data, error } = useSWR(
     `/api/user/profile?username=${user.username}`,
     fetcher
   );
+
+  if (error) Notification.error(error.message);
 
   const [disabled, setDisabled] = React.useState(false);
   const [loading, setLoading] = React.useState(false);

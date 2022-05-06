@@ -5,10 +5,14 @@ import TweetBox from "./TweetBox";
 import useSWR from "swr";
 import { fetcher } from "../../utils/utils";
 import { IPost } from "../../types";
-import { Empty, Skeleton } from "@arco-design/web-react";
+import { Empty, Notification, Skeleton } from "@arco-design/web-react";
 
 function Feed() {
-  const { data } = useSWR("/api/post", fetcher);
+  const { data, error } = useSWR("/api/post", fetcher);
+
+  if (error) {
+    Notification.error(error.message);
+  }
 
   return (
     <div className="feed">

@@ -3,7 +3,13 @@ import { Link, useParams } from "react-router-dom";
 import useSWR from "swr";
 import { fetcher } from "../../utils/utils";
 import "../../style/Profile.css";
-import { Avatar, Button, Image, Message } from "@arco-design/web-react";
+import {
+  Avatar,
+  Button,
+  Image,
+  Message,
+  Notification,
+} from "@arco-design/web-react";
 import { IconUser } from "@arco-design/web-react/icon";
 import { CalendarDot } from "@icon-park/react";
 import { useRecoilValue } from "recoil";
@@ -13,11 +19,12 @@ import { follow, unfollow } from "../../utils/user";
 function Profile() {
   const user = useRecoilValue(authAtom);
   const { username } = useParams();
-  const { data, mutate } = useSWR(
+  const { data, error, mutate } = useSWR(
     `/api/user/profile?username=${username}`,
     fetcher
   );
 
+  if (error) return Notification.error(error.message);
   return (
     <div className="profile">
       <div className="main__header">

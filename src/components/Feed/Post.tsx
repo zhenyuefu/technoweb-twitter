@@ -8,7 +8,9 @@ import {
   Image,
   Input,
   Message,
+  Notification,
 } from "@arco-design/web-react";
+import { useNavigate } from "react-router-dom";
 import { Comments, ShareTwo, ThumbsUp } from "@icon-park/react";
 import { useViewport } from "../../context/viewportContext";
 import { IPost } from "../../types";
@@ -17,7 +19,6 @@ import { authAtom } from "../../context/auth";
 import useSWR, { useSWRConfig } from "swr";
 import { fetcher } from "../../utils/utils";
 import { addComment } from "../../utils/post";
-import { useNavigate } from "react-router-dom";
 
 type Props = {
   post: IPost;
@@ -30,10 +31,14 @@ function Post({ post }: Props) {
   const user = useRecoilValue(authAtom);
 
   const { mutate } = useSWRConfig();
-  const { data } = useSWR(
+  const { data, error } = useSWR(
     `/api/user/profile?username=${user.username}`,
     fetcher
   );
+
+  if (error) {
+    Notification.error(error.message);
+  }
 
   //post
   const {
