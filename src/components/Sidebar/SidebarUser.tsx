@@ -107,14 +107,7 @@ function SidebarUser({ username }: Props) {
   );
 
   return (
-    <Dropdown
-      droplist={dropList}
-      trigger="click"
-      position="top"
-      getPopupContainer={(triggerNode) =>
-        triggerNode.parentElement as HTMLElement
-      }
-    >
+    <Dropdown droplist={dropList} trigger="click" position="top">
       <div className="sidebar__user">
         <div className="sidebar__user__avatar">
           <Avatar>
