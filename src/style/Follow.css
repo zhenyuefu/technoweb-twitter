@@ -14,6 +14,10 @@
     flex-direction: column;
 }
 
+.follow::-webkit-scrollbar {
+    display: none;
+}
+
 .follow .arco-menu-overflow-wrap {
     display: flex;
     justify-content: space-around;
