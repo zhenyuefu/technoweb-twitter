@@ -34,3 +34,27 @@ export async function addComment(postId: string, content: string) {
   );
   return handleResponse(response);
 }
+
+export async function likePost(postId: string) {
+  const response = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/api/post/${postId}/like`,
+    {
+      method: "PATCH",
+      mode: "cors",
+      credentials: "include",
+    }
+  );
+  return handleResponse(response);
+}
+
+export async function unlikePost(postId: string) {
+  const response = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/api/post/${postId}/unlike`,
+    {
+      method: "PATCH",
+      mode: "cors",
+      credentials: "include",
+    }
+  );
+  return handleResponse(response);
+}

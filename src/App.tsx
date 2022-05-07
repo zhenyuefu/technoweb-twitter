@@ -4,22 +4,24 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { authAtom } from "./context/auth";
 import { LoadingPage } from "./components/Loading/LoadingPage";
-// import NoMatch from "./components/NoMatch";
-const NoMatch = React.lazy(() => import("./components/NoMatch"));
-// import Follow from "./components/Profile/Follow";
-const Follow = React.lazy(() => import("./components/Profile/Follow"));
-// import Search from "./components/Search/Search";
-const Search = React.lazy(() => import("./components/Search/Search"));
+// import Home from "./pages/Home";
+const Home = React.lazy(() => import("./pages/Home"));
 // import Feed from "./components/Feed/Feed";
 const Feed = React.lazy(() => import("./components/Feed/Feed"));
+// import Search from "./components/Search/Search";
+const Search = React.lazy(() => import("./components/Search/Search"));
 // import Profile from "./components/Profile/Profile";
 const Profile = React.lazy(() => import("./components/Profile/Profile"));
 // import Login from "./pages/Auth/Login";
 const Login = React.lazy(() => import("./pages/Auth/Login"));
 // import Signup from "./pages/Auth/Signup";
 const Signup = React.lazy(() => import("./pages/Auth/Signup"));
-// import Home from "./pages/Home";
-const Home = React.lazy(() => import("./pages/Home"));
+// import Follow from "./components/Profile/Follow";
+const Follow = React.lazy(() => import("./components/Profile/Follow"));
+
+const ComingSoon = React.lazy(() => import("./components/ComingSoon"));
+// import NoMatch from "./components/NoMatch";
+const NoMatch = React.lazy(() => import("./components/NoMatch"));
 
 function App() {
   return (
@@ -46,6 +48,7 @@ function App() {
               element={<Follow keys="followers" />}
             />
             <Route path="search" element={<Search />} />
+            <Route path="i/coming" element={<ComingSoon />} />
             <Route path="*" element={<NoMatch />} />
           </Route>
           <Route

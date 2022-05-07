@@ -17,7 +17,7 @@ import { useRecoilValue } from "recoil";
 import { authAtom } from "../../context/auth";
 import SidebarUser from "./SidebarUser";
 
-const navlinkStyle = {
+const navLinkStyle = {
   textDecoration: "none",
   color: "inherit",
 };
@@ -49,19 +49,23 @@ function Sidebar() {
       >
         <IconTwitter className="sidebar__twitter-icon" />
 
-        <NavLink to="/home" style={navlinkStyle}>
+        <NavLink to="/home" style={navLinkStyle}>
           {({ isActive }) => (
             <SidebarOption active={isActive} Icon={IconHome} text="Home" />
           )}
         </NavLink>
-        <NavLink to="/search" style={navlinkStyle}>
+        <NavLink to="/search" style={navLinkStyle}>
           {({ isActive }) => (
             <SidebarOption active={isActive} Icon={IconSearch} text="Search" />
           )}
         </NavLink>
-        <SidebarOption Icon={IconNotification} text="Notifications" />
-        <SidebarOption Icon={IconEmail} text="Messages" />
-        <NavLink to={username} style={navlinkStyle}>
+        <NavLink to="/i/coming" style={navLinkStyle}>
+          <SidebarOption Icon={IconNotification} text="Notifications" />
+        </NavLink>
+        <NavLink to="/i/coming" style={navLinkStyle}>
+          <SidebarOption Icon={IconEmail} text="Messages" />
+        </NavLink>
+        <NavLink to={username} style={navLinkStyle}>
           {({ isActive }) => (
             <SidebarOption active={isActive} Icon={IconUser} text="Profile" />
           )}

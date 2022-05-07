@@ -18,7 +18,7 @@ import { useRecoilValue } from "recoil";
 import { authAtom } from "../../context/auth";
 import useSWR, { useSWRConfig } from "swr";
 import { fetcher } from "../../utils/utils";
-import { addComment } from "../../utils/post";
+import { addComment, likePost, unlikePost } from "../../utils/post";
 
 type Props = {
   post: IPost;
@@ -44,14 +44,7 @@ function Post({ post }: Props) {
   }
 
   //post
-  const {
-    author,
-    imagePath,
-    comments,
-    content,
-    countLikes,
-    countReTweet,
-  } = post;
+  const { author, imagePath, comments, content, countReTweet } = post;
   const displayname = `${author?.firstName} ${author?.lastName}`;
   const { width: windowWidth } = useViewport();
   const width =
@@ -59,7 +52,7 @@ function Post({ post }: Props) {
   const height = imagePath && imagePath?.length > 1 ? 150 : 300;
 
   // comment
-  const [like, setLike] = React.useState(false);
+  const [like, setLike] = React.useState(post.likes?.includes(user.uid));
   const [re, setRe] = React.useState(false);
   const [showComment, setShowComment] = React.useState(false);
   const [text, setText] = React.useState("");
@@ -78,6 +71,30 @@ function Post({ post }: Props) {
         });
     }
   };
+
+  function handleLikeClick() {
+    if (like) {
+      unlikePost(post._id)
+        .then((res) => {
+          Message.success(res.message);
+          setLike(false);
+          post.countLikes--;
+        })
+        .catch((error) => {
+          Message.error(error.message);
+        });
+    } else {
+      likePost(post._id)
+        .then((res) => {
+          Message.success(res.message);
+          setLike(true);
+          post.countLikes++;
+        })
+        .catch((error) => {
+          Message.error(error.message);
+        });
+    }
+  }
 
   const actions = (
     <div className="post__footer">
@@ -101,19 +118,22 @@ function Post({ post }: Props) {
       <span
         className="custom-comment-action"
         key="heart"
-        onClick={() => setLike(!like)}
+        onClick={handleLikeClick}
       >
         {like ? (
           <ThumbsUp theme="filled" size="21" fill="#FBE842" strokeWidth={3} />
         ) : (
           <ThumbsUp theme="outline" size="21" strokeWidth={3} />
         )}{" "}
-        {countLikes + (like ? 1 : 0)}
+        {post.countLikes}
       </span>
       <span
         className="custom-comment-action"
         key="star"
-        onClick={() => setRe(!re)}
+        onClick={() => {
+          setRe(!re);
+          Message.info("This feature is not available yet");
+        }}
       >
         {re ? (
           <ShareTwo theme="filled" size="21" fill="#2f88ff" strokeWidth={3} />

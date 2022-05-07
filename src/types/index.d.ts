@@ -80,9 +80,9 @@ interface IPost {
   imagePath?: IImage[];
   createAt: Date;
   comments?: IComment[];
-  likes?: IUser[];
+  likes?: string[];
   countLikes: number;
-  reTweet?: IPost[];
+  reTweet?: string[];
   countReTweet: number;
   isDelete: boolean;
 }
