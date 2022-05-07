@@ -170,6 +170,16 @@ function Profile() {
                   <Button
                     shape="round"
                     size="large"
+                    status={
+                      data?.user?.followers?.includes(user.uid)
+                        ? "danger"
+                        : "default"
+                    }
+                    type={
+                      data?.user?.followers?.includes(user.uid)
+                        ? "outline"
+                        : "default"
+                    }
                     onClick={async () => {
                       try {
                         if (data?.user?.followers?.includes(user.uid)) {

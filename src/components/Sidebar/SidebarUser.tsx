@@ -19,13 +19,17 @@ function SidebarUser({ username }: Props) {
   const { width } = useViewport();
   const navigate = useNavigate();
   const setAuth = useSetRecoilState(authAtom);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("darkMode") === "true"
+  );
 
   useEffect(() => {
     if (darkMode) {
       document.body.setAttribute("arco-theme", "dark");
+      localStorage.setItem("darkMode", "true");
     } else {
       document.body.removeAttribute("arco-theme");
+      localStorage.setItem("darkMode", "false");
     }
   }, [darkMode]);
 
