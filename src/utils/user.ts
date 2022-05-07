@@ -104,3 +104,23 @@ export async function unfollow(uid: string) {
   );
   return handleResponse(res);
 }
+
+export async function updateProfile(data: {
+  avatar?: string;
+  bgPicture?: string;
+  introduction?: string;
+}) {
+  const res = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/api/user/profile`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "PATCH",
+      mode: "cors",
+      credentials: "include",
+      body: JSON.stringify(data),
+    }
+  );
+  return handleResponse(res);
+}

@@ -7,7 +7,7 @@ import App from "./App";
 import ViewportProvider from "./context/viewportContext";
 
 import "@icon-park/react/styles/index.css";
-import "@arco-design/web-react/dist/css/arco.css";
+// import "@arco-design/web-react/dist/css/arco.css";
 import "./style/index.css";
 import { ConfigProvider } from "@arco-design/web-react";
 import enUS from "@arco-design/web-react/es/locale/en-US";

@@ -47,12 +47,13 @@ function TweetBox() {
       images: imgInfos,
     })
       .then((r) => {
-        Message.success(r.message);
         setLoading(false);
         setText("");
         setFileList([]);
         setImgInfos([]);
-        mutate("/api/post");
+        mutate("/api/post").then(() => {
+          Message.success(r.message);
+        });
       })
       .catch((e) => {
         Message.error(e.message);
@@ -130,7 +131,7 @@ function TweetBox() {
       <div className="tweetbox__input">
         <Input.TextArea
           placeholder="What's happening?"
-          autoSize={{ minRows: 2, maxRows: 6 }}
+          autoSize={{ minRows: 2, maxRows: 20 }}
           maxLength={500}
           showWordLimit
           style={{

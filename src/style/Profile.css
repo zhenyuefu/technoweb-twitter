@@ -89,3 +89,13 @@
   align-items: center;
   justify-content: center;
 }
+
+.modal-demo-without-content-spacing .arco-modal-content {
+  padding: 0;
+}
+
+.arco-image-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
