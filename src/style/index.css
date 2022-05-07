@@ -13,8 +13,8 @@ body {
 }
 
 .arco-modal-footer {
-    border: none;
-    text-align: center;
+    border: none !important;
+    text-align: center !important;
 }
 
 .reactEasyCrop_Container {
