@@ -3,6 +3,7 @@ import "../../style/Search.css";
 import {
   AutoComplete,
   Avatar,
+  BackTop,
   Empty,
   Input,
   Notification,
@@ -41,6 +42,11 @@ function Search() {
       <div className="main__header">
         <PageHeader title="Search" backIcon onBack={() => history.back()} />
       </div>
+      <BackTop
+        visibleHeight={30}
+        style={{ position: "absolute" }}
+        target={() => document.getElementById("results") as HTMLElement}
+      />
       <AutoComplete
         style={{
           width: "100%",
@@ -50,7 +56,12 @@ function Search() {
             <AutoComplete.Option
               key={index}
               value={user.username || ""}
-              style={{ display: "flex", alignItems: "center", margin: 2 }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                margin: 2,
+                width: "98%",
+              }}
             >
               <Avatar size={24} style={{ marginLeft: 6, marginRight: 12 }}>
                 {user.avatar ? (
@@ -73,18 +84,20 @@ function Search() {
         }}
         triggerElement={<Input.Search size="large" loading={isValidating} />}
       />
-      <Skeleton
-        style={{ display: "flex", alignItems: "center", margin: 16 }}
-        loading={!data}
-        image={{ shape: "circle" }}
-        animation
-      >
-        {data?.posts && data.posts.length > 0 ? (
-          data.posts.map((post: IPost) => <Post post={post} key={post._id} />)
-        ) : (
-          <Empty />
-        )}
-      </Skeleton>
+      <div className="search" id="results">
+        <Skeleton
+          style={{ alignItems: "center", margin: 16, width: "100%" }}
+          loading={!data}
+          image={{ shape: "circle" }}
+          animation
+        >
+          {data?.posts && data.posts.length > 0 ? (
+            data.posts.map((post: IPost) => <Post post={post} key={post._id} />)
+          ) : (
+            <Empty />
+          )}
+        </Skeleton>
+      </div>
     </div>
   );
 }
