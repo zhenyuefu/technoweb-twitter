@@ -16,7 +16,7 @@ function SidebarOption({ Icon, text, active = false }: Props) {
     <div
       className={`sidebar__option ${active ? "sidebar__option--active" : ""}`}
     >
-      <Icon />
+      <Icon size={20} theme={active ? "filled" : "outline"} />
       {width < breakpoint ? null : <span>{text}</span>}
     </div>
   );

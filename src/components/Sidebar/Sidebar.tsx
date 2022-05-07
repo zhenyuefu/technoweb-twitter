@@ -1,13 +1,14 @@
 import React from "react";
 import "../../style/Sidebar.css";
+import { IconTwitter } from "@arco-design/web-react/icon";
 import {
-  IconEmail,
-  IconHome,
-  IconNotification,
-  IconSearch,
-  IconTwitter,
-  IconUser,
-} from "@arco-design/web-react/icon";
+  Home as IconHome,
+  Message as IconEmail,
+  Remind as IconNotification,
+  Search as IconSearch,
+  User as IconUser,
+} from "@icon-park/react";
+
 import { Button, Grid } from "@arco-design/web-react";
 import SidebarOption from "./SidebarOption";
 import { useViewport } from "../../context/viewportContext";
@@ -54,12 +55,16 @@ function Sidebar() {
           )}
         </NavLink>
         <NavLink to="/search" style={navlinkStyle}>
-          <SidebarOption Icon={IconSearch} text="Search" />
+          {({ isActive }) => (
+            <SidebarOption active={isActive} Icon={IconSearch} text="Search" />
+          )}
         </NavLink>
         <SidebarOption Icon={IconNotification} text="Notifications" />
         <SidebarOption Icon={IconEmail} text="Messages" />
         <NavLink to={username} style={navlinkStyle}>
-          <SidebarOption Icon={IconUser} text="Profile" />
+          {({ isActive }) => (
+            <SidebarOption active={isActive} Icon={IconUser} text="Profile" />
+          )}
         </NavLink>
         {width < breakpoint ? (
           <Button
