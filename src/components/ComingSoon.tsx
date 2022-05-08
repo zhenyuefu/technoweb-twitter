@@ -6,6 +6,7 @@ const ComingSoon = () => {
     <Result
       style={{
         marginTop: "80px",
+        maxWidth: "650px",
       }}
       status="404"
       title="Whoops, This page is under development and will be coming soon..."
