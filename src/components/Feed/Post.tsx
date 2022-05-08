@@ -20,6 +20,7 @@ import { authAtom } from "../../context/auth";
 import useSWR, { useSWRConfig } from "swr";
 import { fetcher } from "../../utils/utils";
 import { addComment, likePost, unlikePost } from "../../utils/post";
+import moment from "moment";
 
 type Props = {
   postId?: string;
@@ -222,6 +223,13 @@ function Post({ postId }: Props) {
                 <h5 style={{ margin: 0, marginRight: 4 }}>{displayname}</h5>
                 <span>@{author?.username}</span>
               </div>
+            }
+            datetime={
+              moment(post?.createAt).diff(moment(), "days") < -1
+                ? moment(post?.createAt).diff(moment(), "years") < -1
+                  ? moment(post?.createAt).format("D MMM YYYY")
+                  : moment(post?.createAt).format("D MMM")
+                : moment(post?.createAt).fromNow(true)
             }
             content={
               <div>
