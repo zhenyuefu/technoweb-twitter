@@ -157,46 +157,6 @@ function Post({ postId }: Props) {
   return (
     <div className="post">
       <Skeleton loading={!post} image animation>
-        {/*<div className="post__avatar">*/}
-        {/*  <Avatar>*/}
-        {/*    {author.avatar ? <img src={author.avatar} alt={author.username}/> : <IconUser/>}*/}
-        {/*  </Avatar>*/}
-        {/*</div>*/}
-        {/*<div className="post__body">*/}
-        {/*  <div className="post__header">*/}
-        {/*    <h5 style={{margin: 0, marginRight: 4}}>{displayname}</h5>*/}
-        {/*    <span>@{author.username}</span>*/}
-        {/*  </div>*/}
-        {/*  <div className="post__text">*/}
-        {/*    {content}*/}
-        {/*  </div>*/}
-        {/*  <div className="post__image">*/}
-        {/*    <Image.PreviewGroup>*/}
-        {/*      {imagePath && imagePath.map((src, index) => <Image*/}
-        {/*        key={index}*/}
-        {/*        src={src.link}*/}
-        {/*        width={width}*/}
-        {/*        height={height}*/}
-        {/*        alt={`image${index + 1}`}*/}
-        {/*        loader*/}
-        {/*        loading='lazy'*/}
-        {/*        style={{margin: 5, borderRadius: 20}}*/}
-        {/*      />)}*/}
-        {/*    </Image.PreviewGroup>*/}
-
-        {/*  </div>*/}
-        {/*  <div className="post__footer">*/}
-        {/*    <Button icon={<Comments theme="outline" size="20" fill="#333"/>} style={{*/}
-        {/*      backgroundColor: "transparent",*/}
-        {/*    }}/>*/}
-        {/*    <Button icon={<ThumbsUp theme="outline" size="20" fill="#333"/>} style={{*/}
-        {/*      backgroundColor: "transparent",*/}
-        {/*    }}/>*/}
-        {/*    <Button icon={<ShareTwo theme="outline" size="20" fill="#333"/>} style={{*/}
-        {/*      backgroundColor: "transparent",*/}
-        {/*    }}/>*/}
-        {/*  </div>*/}
-        {/*</div>*/}
         {post && (
           <Comment
             actions={actions}
