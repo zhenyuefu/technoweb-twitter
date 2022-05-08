@@ -24,6 +24,10 @@ Array.from({ length: 10 }).forEach((_, index) => {
   );
 });
 
+if (localStorage.getItem("darkMode") === "true") {
+  document.body.setAttribute("arco-theme", "dark");
+}
+
 // const darkThemeMq = window.matchMedia("(prefers-color-scheme: dark)");
 //
 // if (darkThemeMq.matches) {
