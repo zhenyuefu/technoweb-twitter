@@ -26,6 +26,7 @@
   border-color: var(--color-border);
   min-width: min-content;
   overflow-y: scroll;
+  overflow-x: hidden;
   max-width: 650px;
   position: relative;
   align-items: stretch;
@@ -44,6 +45,7 @@
   border-color: var(--color-border);
   min-width: min-content;
   overflow-y: scroll;
+  overflow-x: hidden;
   max-width: 650px;
   position: relative;
   align-items: stretch;
