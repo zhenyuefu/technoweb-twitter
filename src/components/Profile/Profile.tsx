@@ -29,6 +29,7 @@ import { IImage, IPost } from "../../types";
 import Post from "../Feed/Post";
 import { Cropper } from "../Crops";
 import { UploadItem } from "@arco-design/web-react/es/Upload";
+import moment from "moment";
 
 function DeleteImgurImage(deleteHash: string) {
   return fetch("https://api.imgur.com/3/image/" + deleteHash, {
@@ -297,9 +298,19 @@ function Profile() {
             {select === "likes" && (
               <div style={{ marginTop: 16 }}>
                 {data && data.user.likes && data.user.likes.length > 0 ? (
-                  data.user.likes.map((postId: string) => (
-                    <Post postId={postId} key={postId} />
-                  ))
+                  data.user.likes
+                    .sort((a: string, b: string) => {
+                      const m1 = moment(
+                        new Date(parseInt(a.toString().slice(0, 8), 16) * 1000)
+                      );
+                      const m2 = moment(
+                        new Date(parseInt(b.toString().slice(0, 8), 16) * 1000)
+                      );
+                      return m2.diff(m1);
+                    })
+                    .map((postId: string) => (
+                      <Post postId={postId} key={postId} />
+                    ))
                 ) : (
                   <Empty />
                 )}
