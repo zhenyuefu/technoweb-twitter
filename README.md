@@ -91,7 +91,7 @@ Le choix d'[arco design](https://github.com/arco-design/arco-design) comme UI co
 - Inscription et connexion de l'utilisateur
 - Routage avec `react-router`
 - Saut automatique en fonction du statut de connexion, possibilité de sauvegarder le statut de connexion
-- Publier des posts contenant des images, poster des commentaires, like post
+- Publier des posts contenant des images, poster des commentaires, like/unlike
 - Follow/Unfollow 
 - Télécharger une photo de profil, avatar, introduction
 - Dark Mode
@@ -99,9 +99,7 @@ Le choix d'[arco design](https://github.com/arco-design/arco-design) comme UI co
 ##### TODO
 
 - [ ] delete post
-
 - [ ] retweet
-
 - [ ] message private
 - [ ] notification
-- [ ] …
+- [ ] delete user/ change password…
