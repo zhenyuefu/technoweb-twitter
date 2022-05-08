@@ -285,7 +285,7 @@ function Profile() {
                   <Skeleton loading={!posts} image animation>
                     {posts && posts.length > 0 ? (
                       posts.map((post: IPost) => (
-                        <Post post={post} key={post._id} />
+                        <Post postId={post._id} key={post._id} />
                       ))
                     ) : (
                       <Empty />

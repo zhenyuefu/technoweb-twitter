@@ -92,7 +92,9 @@ function Search() {
           animation
         >
           {data?.posts && data.posts.length > 0 ? (
-            data.posts.map((post: IPost) => <Post post={post} key={post._id} />)
+            data.posts.map((post: IPost) => (
+              <Post postId={post._id} key={post._id} />
+            ))
           ) : (
             <Empty />
           )}

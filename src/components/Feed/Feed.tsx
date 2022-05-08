@@ -38,7 +38,7 @@ function Feed() {
         <div className="line" style={{ paddingTop: "12px" }}></div>
         <Skeleton loading={!data} image animation>
           {data && data.length > 0 ? (
-            data.map((post: IPost) => <Post post={post} key={post._id} />)
+            data.map((post: IPost) => <Post postId={post._id} key={post._id} />)
           ) : (
             <Empty />
           )}

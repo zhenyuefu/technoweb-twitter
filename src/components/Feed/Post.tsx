@@ -22,11 +22,10 @@ import { fetcher } from "../../utils/utils";
 import { addComment, likePost, unlikePost } from "../../utils/post";
 
 type Props = {
-  post?: IPost;
   postId?: string;
 };
 
-function Post({ post, postId }: Props) {
+function Post({ postId }: Props) {
   const navigate = useNavigate();
 
   //user
@@ -37,7 +36,7 @@ function Post({ post, postId }: Props) {
     `/api/user/profile?username=${user.username}`,
     fetcher
   );
-  const { data: postswr } = useSWR(
+  const { data: post, mutate: mutatePost } = useSWR<IPost>(
     () => postId && "/api/post/" + postId,
     fetcher
   );
@@ -49,9 +48,6 @@ function Post({ post, postId }: Props) {
     });
   }
 
-  if (!post) {
-    post = postswr;
-  }
   //post
   const { author, imagePath, comments, content, countReTweet } = post || {};
 
@@ -62,7 +58,6 @@ function Post({ post, postId }: Props) {
   const height = imagePath && imagePath?.length > 1 ? 150 : 300;
 
   // comment
-  const [like, setLike] = React.useState(post?.likes?.includes(user.uid));
   const [re, setRe] = React.useState(false);
   const [showComment, setShowComment] = React.useState(false);
   const [text, setText] = React.useState("");
@@ -81,13 +76,15 @@ function Post({ post, postId }: Props) {
         });
     }
   };
+  // likes
+  const like = post?.likes?.includes(user.uid);
 
   function handleLikeClick() {
     if (like && post) {
       unlikePost(post._id)
         .then((res) => {
           Message.success(res.message);
-          setLike(false);
+          mutatePost();
           post && post.countLikes--;
         })
         .catch((error) => {
@@ -98,7 +95,7 @@ function Post({ post, postId }: Props) {
         likePost(post._id)
           .then((res) => {
             Message.success(res.message);
-            setLike(true);
+            mutatePost();
             post && post.countLikes++;
           })
           .catch((error) => {
@@ -131,7 +128,7 @@ function Post({ post, postId }: Props) {
         key="heart"
         onClick={handleLikeClick}
       >
-        {like ? (
+        {post && like ? (
           <ThumbsUp theme="filled" size="21" fill="#FBE842" strokeWidth={3} />
         ) : (
           <ThumbsUp theme="outline" size="21" strokeWidth={3} />
