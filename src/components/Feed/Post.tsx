@@ -17,7 +17,7 @@ import { useViewport } from "../../context/viewportContext";
 import { IPost } from "../../types";
 import { useRecoilValue } from "recoil";
 import { authAtom } from "../../context/auth";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 import { fetcher } from "../../utils/utils";
 import { addComment, likePost, unlikePost } from "../../utils/post";
 import moment from "moment";
@@ -32,7 +32,6 @@ function Post({ postId }: Props) {
   //user
   const user = useRecoilValue(authAtom);
 
-  const { mutate } = useSWRConfig();
   const { data, error } = useSWR(
     `/api/user/profile?username=${user.username}`,
     fetcher
@@ -69,7 +68,7 @@ function Post({ postId }: Props) {
         .then((res) => {
           setText("");
           Message.success(res.message);
-          mutate("/api/post");
+          mutatePost();
         })
         .catch((error) => {
           setText("");

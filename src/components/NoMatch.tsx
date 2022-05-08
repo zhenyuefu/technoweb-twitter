@@ -6,7 +6,7 @@ function NoMatch() {
   const navigate = useNavigate();
   return (
     <Result
-      style={{ marginTop: "80px" }}
+      style={{ marginTop: "80px", maxWidth: "650px" }}
       status="404"
       title="Hmm...this page doesn’t exist."
       subTitle="Try searching for something else."
