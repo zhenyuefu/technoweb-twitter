@@ -1,7 +1,7 @@
 .follow {
     border-right: 1px solid;
     border-color: var(--color-border);
-    min-width: fit-content;
+    min-width: min-content;
     overflow-y: scroll;
     background-color: var(--color-bg-3);
     max-width: 650px;
