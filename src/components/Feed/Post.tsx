@@ -225,10 +225,10 @@ function Post({ postId }: Props) {
               </div>
             }
             datetime={
-              moment(post?.createAt).diff(moment(), "days") < -1
-                ? moment(post?.createAt).diff(moment(), "years") < -1
-                  ? moment(post?.createAt).format("D MMM YYYY")
-                  : moment(post?.createAt).format("D MMM")
+              moment(post?.createAt).diff(moment(), "days") < 0
+                ? moment(post?.createAt).diff(moment(), "years") < 0
+                  ? moment(post?.createAt).format("MMM D, YYYY")
+                  : moment(post?.createAt).format("MMM D")
                 : moment(post?.createAt).fromNow(true)
             }
             content={
