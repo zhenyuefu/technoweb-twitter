@@ -9,6 +9,7 @@ import {
   Input,
   Message,
   Notification,
+  Skeleton,
 } from "@arco-design/web-react";
 import { useNavigate } from "react-router-dom";
 import { Comments, ShareTwo, ThumbsUp } from "@icon-park/react";
@@ -21,10 +22,11 @@ import { fetcher } from "../../utils/utils";
 import { addComment, likePost, unlikePost } from "../../utils/post";
 
 type Props = {
-  post: IPost;
+  post?: IPost;
+  postId?: string;
 };
 
-function Post({ post }: Props) {
+function Post({ post, postId }: Props) {
   const navigate = useNavigate();
 
   //user
@@ -35,6 +37,10 @@ function Post({ post }: Props) {
     `/api/user/profile?username=${user.username}`,
     fetcher
   );
+  const { data: postswr } = useSWR(
+    () => postId && "/api/post/" + postId,
+    fetcher
+  );
 
   if (error) {
     Notification.error({
@@ -43,8 +49,12 @@ function Post({ post }: Props) {
     });
   }
 
+  if (!post) {
+    post = postswr;
+  }
   //post
-  const { author, imagePath, comments, content, countReTweet } = post;
+  const { author, imagePath, comments, content, countReTweet } = post || {};
+
   const displayname = `${author?.firstName} ${author?.lastName}`;
   const { width: windowWidth } = useViewport();
   const width =
@@ -52,13 +62,13 @@ function Post({ post }: Props) {
   const height = imagePath && imagePath?.length > 1 ? 150 : 300;
 
   // comment
-  const [like, setLike] = React.useState(post.likes?.includes(user.uid));
+  const [like, setLike] = React.useState(post?.likes?.includes(user.uid));
   const [re, setRe] = React.useState(false);
   const [showComment, setShowComment] = React.useState(false);
   const [text, setText] = React.useState("");
 
   const sendComment = () => {
-    if (text.length > 0) {
+    if (text.length > 0 && post) {
       addComment(post._id, text)
         .then((res) => {
           setText("");
@@ -73,26 +83,27 @@ function Post({ post }: Props) {
   };
 
   function handleLikeClick() {
-    if (like) {
+    if (like && post) {
       unlikePost(post._id)
         .then((res) => {
           Message.success(res.message);
           setLike(false);
-          post.countLikes--;
+          post && post.countLikes--;
         })
         .catch((error) => {
           Message.error(error.message);
         });
     } else {
-      likePost(post._id)
-        .then((res) => {
-          Message.success(res.message);
-          setLike(true);
-          post.countLikes++;
-        })
-        .catch((error) => {
-          Message.error(error.message);
-        });
+      post &&
+        likePost(post._id)
+          .then((res) => {
+            Message.success(res.message);
+            setLike(true);
+            post && post.countLikes++;
+          })
+          .catch((error) => {
+            Message.error(error.message);
+          });
     }
   }
 
@@ -125,7 +136,7 @@ function Post({ post }: Props) {
         ) : (
           <ThumbsUp theme="outline" size="21" strokeWidth={3} />
         )}{" "}
-        {post.countLikes}
+        {post && post.countLikes}
       </span>
       <span
         className="custom-comment-action"
@@ -140,177 +151,181 @@ function Post({ post }: Props) {
         ) : (
           <ShareTwo theme="outline" size="21" strokeWidth={3} />
         )}{" "}
-        {countReTweet + (re ? 1 : 0)}
+        {countReTweet || 0 + (re ? 1 : 0)}
       </span>
     </div>
   );
 
   return (
     <div className="post">
-      {/*<div className="post__avatar">*/}
-      {/*  <Avatar>*/}
-      {/*    {author.avatar ? <img src={author.avatar} alt={author.username}/> : <IconUser/>}*/}
-      {/*  </Avatar>*/}
-      {/*</div>*/}
-      {/*<div className="post__body">*/}
-      {/*  <div className="post__header">*/}
-      {/*    <h5 style={{margin: 0, marginRight: 4}}>{displayname}</h5>*/}
-      {/*    <span>@{author.username}</span>*/}
-      {/*  </div>*/}
-      {/*  <div className="post__text">*/}
-      {/*    {content}*/}
-      {/*  </div>*/}
-      {/*  <div className="post__image">*/}
-      {/*    <Image.PreviewGroup>*/}
-      {/*      {imagePath && imagePath.map((src, index) => <Image*/}
-      {/*        key={index}*/}
-      {/*        src={src.link}*/}
-      {/*        width={width}*/}
-      {/*        height={height}*/}
-      {/*        alt={`image${index + 1}`}*/}
-      {/*        loader*/}
-      {/*        loading='lazy'*/}
-      {/*        style={{margin: 5, borderRadius: 20}}*/}
-      {/*      />)}*/}
-      {/*    </Image.PreviewGroup>*/}
+      <Skeleton loading={!post} image animation>
+        {/*<div className="post__avatar">*/}
+        {/*  <Avatar>*/}
+        {/*    {author.avatar ? <img src={author.avatar} alt={author.username}/> : <IconUser/>}*/}
+        {/*  </Avatar>*/}
+        {/*</div>*/}
+        {/*<div className="post__body">*/}
+        {/*  <div className="post__header">*/}
+        {/*    <h5 style={{margin: 0, marginRight: 4}}>{displayname}</h5>*/}
+        {/*    <span>@{author.username}</span>*/}
+        {/*  </div>*/}
+        {/*  <div className="post__text">*/}
+        {/*    {content}*/}
+        {/*  </div>*/}
+        {/*  <div className="post__image">*/}
+        {/*    <Image.PreviewGroup>*/}
+        {/*      {imagePath && imagePath.map((src, index) => <Image*/}
+        {/*        key={index}*/}
+        {/*        src={src.link}*/}
+        {/*        width={width}*/}
+        {/*        height={height}*/}
+        {/*        alt={`image${index + 1}`}*/}
+        {/*        loader*/}
+        {/*        loading='lazy'*/}
+        {/*        style={{margin: 5, borderRadius: 20}}*/}
+        {/*      />)}*/}
+        {/*    </Image.PreviewGroup>*/}
 
-      {/*  </div>*/}
-      {/*  <div className="post__footer">*/}
-      {/*    <Button icon={<Comments theme="outline" size="20" fill="#333"/>} style={{*/}
-      {/*      backgroundColor: "transparent",*/}
-      {/*    }}/>*/}
-      {/*    <Button icon={<ThumbsUp theme="outline" size="20" fill="#333"/>} style={{*/}
-      {/*      backgroundColor: "transparent",*/}
-      {/*    }}/>*/}
-      {/*    <Button icon={<ShareTwo theme="outline" size="20" fill="#333"/>} style={{*/}
-      {/*      backgroundColor: "transparent",*/}
-      {/*    }}/>*/}
-      {/*  </div>*/}
-      {/*</div>*/}
-      <Comment
-        actions={actions}
-        style={{
-          marginBottom: 10,
-          marginTop: 10,
-          width: "100%",
-        }}
-        avatar={
-          <Avatar
-            onClick={() => {
-              navigate(`/${author?.username}`);
-            }}
-          >
-            {author?.avatar ? (
-              <img src={author?.avatar} alt={author?.username} />
-            ) : (
-              <IconUser />
-            )}
-          </Avatar>
-        }
-        author={
-          <div className="post__header">
-            <h5 style={{ margin: 0, marginRight: 4 }}>{displayname}</h5>
-            <span>@{author?.username}</span>
-          </div>
-        }
-        content={
-          <div>
-            <div className="post__text">{content}</div>
-            <div className="post__image">
-              <Image.PreviewGroup>
-                {imagePath &&
-                  imagePath.map((src, index) => (
-                    <Image
-                      key={index}
-                      src={src.link}
-                      width={width}
-                      height={height}
-                      alt={`image${index + 1}`}
-                      loader
-                      loading="lazy"
-                      style={{ margin: 5, borderRadius: 20 }}
-                    />
-                  ))}
-              </Image.PreviewGroup>
-            </div>
-          </div>
-        }
-      >
-        {showComment &&
-          comments &&
-          comments.map((comment, index) => (
-            <Comment
-              key={index}
-              avatar={
-                <Avatar>
-                  {comment.author.avatar ? (
-                    <img
-                      src={comment.author.avatar}
-                      alt={comment.author.username}
-                    />
-                  ) : (
-                    <IconUser />
-                  )}
-                </Avatar>
-              }
-              author={
-                <div className="post__header">
-                  <h5
-                    style={{ margin: 0, marginRight: 4 }}
-                  >{`${comment.author.firstName} ${comment.author.lastName}`}</h5>
-                  <span>@{comment.author.username}</span>
-                </div>
-              }
-              content={<div className="post__text">{comment.content}</div>}
-            />
-          ))}
-        {showComment && (
+        {/*  </div>*/}
+        {/*  <div className="post__footer">*/}
+        {/*    <Button icon={<Comments theme="outline" size="20" fill="#333"/>} style={{*/}
+        {/*      backgroundColor: "transparent",*/}
+        {/*    }}/>*/}
+        {/*    <Button icon={<ThumbsUp theme="outline" size="20" fill="#333"/>} style={{*/}
+        {/*      backgroundColor: "transparent",*/}
+        {/*    }}/>*/}
+        {/*    <Button icon={<ShareTwo theme="outline" size="20" fill="#333"/>} style={{*/}
+        {/*      backgroundColor: "transparent",*/}
+        {/*    }}/>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
+        {post && (
           <Comment
+            actions={actions}
             style={{
-              width: "90%",
+              marginBottom: 10,
+              marginTop: 10,
+              width: "100%",
             }}
-            align="right"
-            actions={[
-              <Button
-                key="0"
-                type="primary"
-                shape="round"
-                onClick={sendComment}
-              >
-                Reply
-              </Button>,
-            ]}
             avatar={
-              <Avatar>
-                {data?.user?.avatar ? (
-                  <img src={data?.user?.avatar} alt={user.username} />
+              <Avatar
+                onClick={() => {
+                  navigate(`/${author?.username}`);
+                }}
+              >
+                {author?.avatar ? (
+                  <img src={author?.avatar} alt={author?.username} />
                 ) : (
                   <IconUser />
                 )}
               </Avatar>
             }
-            content={
-              <div>
-                <Input.TextArea
-                  placeholder="Add a comment"
-                  autoSize={{ minRows: 2, maxRows: 6 }}
-                  maxLength={500}
-                  showWordLimit
-                  style={{
-                    flex: 1,
-                    border: "none",
-                    outline: "none",
-                    backgroundColor: "transparent",
-                    resize: "none",
-                  }}
-                  value={text}
-                  onChange={(e) => setText(e)}
-                />
+            author={
+              <div className="post__header">
+                <h5 style={{ margin: 0, marginRight: 4 }}>{displayname}</h5>
+                <span>@{author?.username}</span>
               </div>
             }
-          />
+            content={
+              <div>
+                <div className="post__text">{content}</div>
+                <div className="post__image">
+                  <Image.PreviewGroup>
+                    {imagePath &&
+                      imagePath.map((src, index) => (
+                        <Image
+                          key={index}
+                          src={src.link}
+                          width={width}
+                          height={height}
+                          alt={`image${index + 1}`}
+                          loader
+                          loading="lazy"
+                          style={{ margin: 5, borderRadius: 20 }}
+                        />
+                      ))}
+                  </Image.PreviewGroup>
+                </div>
+              </div>
+            }
+          >
+            {showComment &&
+              comments &&
+              comments.map((comment, index) => (
+                <Comment
+                  key={index}
+                  avatar={
+                    <Avatar>
+                      {comment.author.avatar ? (
+                        <img
+                          src={comment.author.avatar}
+                          alt={comment.author.username}
+                        />
+                      ) : (
+                        <IconUser />
+                      )}
+                    </Avatar>
+                  }
+                  author={
+                    <div className="post__header">
+                      <h5
+                        style={{ margin: 0, marginRight: 4 }}
+                      >{`${comment.author.firstName} ${comment.author.lastName}`}</h5>
+                      <span>@{comment.author.username}</span>
+                    </div>
+                  }
+                  content={<div className="post__text">{comment.content}</div>}
+                />
+              ))}
+            {showComment && (
+              <Comment
+                style={{
+                  width: "90%",
+                }}
+                align="right"
+                actions={[
+                  <Button
+                    key="0"
+                    type="primary"
+                    shape="round"
+                    onClick={sendComment}
+                  >
+                    Reply
+                  </Button>,
+                ]}
+                avatar={
+                  <Avatar>
+                    {data?.user?.avatar ? (
+                      <img src={data?.user?.avatar} alt={user.username} />
+                    ) : (
+                      <IconUser />
+                    )}
+                  </Avatar>
+                }
+                content={
+                  <div>
+                    <Input.TextArea
+                      placeholder="Add a comment"
+                      autoSize={{ minRows: 2, maxRows: 6 }}
+                      maxLength={500}
+                      showWordLimit
+                      style={{
+                        flex: 1,
+                        border: "none",
+                        outline: "none",
+                        backgroundColor: "transparent",
+                        resize: "none",
+                      }}
+                      value={text}
+                      onChange={(e) => setText(e)}
+                    />
+                  </div>
+                }
+              />
+            )}
+          </Comment>
         )}
-      </Comment>
+      </Skeleton>
     </div>
   );
 }

@@ -11,6 +11,7 @@ import {
   Empty,
   Image,
   Input,
+  Menu,
   Message,
   Modal,
   PageHeader,
@@ -45,6 +46,9 @@ function Profile() {
   const [bgPicture, setBgPicture] = React.useState<IImage>();
   const [avatar, setAvatar] = React.useState<IImage>();
   const [introduction, setIntroduction] = React.useState("");
+
+  // Menu
+  const [select, setSelect] = React.useState("tweets");
   const user = useRecoilValue(authAtom);
   const { username } = useParams();
   const { data, error, mutate } = useSWR(
@@ -138,125 +142,174 @@ function Profile() {
             />
           </div>
         ) : (
-          <div className="profile__info">
-            <div className="profile__avatar__row">
-              <div className="profile__avatar">
-                <Avatar
-                  size={133.5}
-                  style={{
-                    borderRadius: 9999,
-                    borderColor: "var(--twitter-background-color)",
-                    borderWidth: "5px",
-                    borderStyle: "solid",
-                  }}
-                >
-                  {data?.user?.avatar ? (
-                    <img src={data?.user?.avatar} alt={username} />
-                  ) : (
-                    <IconUser />
-                  )}
-                </Avatar>
-              </div>
-              <div className="profile__buttons">
-                {user?.username === username ? (
-                  <Button
-                    shape="round"
-                    size="large"
-                    onClick={() => setVisible(true)}
-                  >
-                    Set up profile
-                  </Button>
-                ) : (
-                  <Button
-                    shape="round"
-                    size="large"
-                    status={
-                      data?.user?.followers?.includes(user.uid)
-                        ? "danger"
-                        : "default"
-                    }
-                    type={
-                      data?.user?.followers?.includes(user.uid)
-                        ? "outline"
-                        : "default"
-                    }
-                    onClick={async () => {
-                      try {
-                        if (data?.user?.followers?.includes(user.uid)) {
-                          await unfollow(data?.user?._id);
-                          await mutate();
-                        } else {
-                          await follow(data?.user?._id);
-                          await mutate();
-                        }
-                      } catch (e) {
-                        Message.error((e as Error).message);
-                      }
+          <div>
+            <div className="profile__info">
+              <div className="profile__avatar__row">
+                <div className="profile__avatar">
+                  <Avatar
+                    size={133.5}
+                    style={{
+                      borderRadius: 9999,
+                      borderColor: "var(--twitter-background-color)",
+                      borderWidth: "5px",
+                      borderStyle: "solid",
                     }}
                   >
-                    {data?.user?.followers?.includes(user.uid)
-                      ? "Unfollow"
-                      : "Follow"}
-                  </Button>
-                )}
-              </div>
-            </div>
-            <h4 style={{ margin: 0, fontFamily: "inherit" }}>
-              {data?.user?.firstName + " " + data?.user?.lastName}
-            </h4>
-            <p style={{ margin: 0, color: "gray" }}>@{username}</p>
-            <p>{data?.user?.introduction}</p>
-            <div className="profile__icons">
-              <div style={{ display: "inline-flex", alignItems: "center" }}>
-                <CalendarDot theme="outline" />
-                <p style={{ margin: 0, color: "gray", marginLeft: 5 }}>
-                  Joined{" "}
-                  {new Date(data?.user?.createAt).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                  })}
-                </p>
-              </div>
-            </div>
-            <div className="profile__friends">
-              <Link to={`/${data?.user?.username}/following`}>
-                <div className="profile__friends_field">
-                  <span style={{ fontWeight: "bold" }}>
-                    {data?.user?.following?.length || 0}{" "}
-                  </span>
-                  <span style={{ color: "var(--color-text-3)" }}>
-                    Following
-                  </span>
+                    {data?.user?.avatar ? (
+                      <img src={data?.user?.avatar} alt={username} />
+                    ) : (
+                      <IconUser />
+                    )}
+                  </Avatar>
                 </div>
-              </Link>
-              <Link to={`/${data?.user?.username}/followers`}>
-                <div className="profile__friends_field">
-                  <span style={{ fontWeight: "bold" }}>
-                    {data?.user?.followers?.length || 0}{" "}
-                  </span>
-                  <span style={{ color: "var(--color-text-3)" }}>
-                    Followers
-                  </span>
+                <div className="profile__buttons">
+                  {user?.username === username ? (
+                    <Button
+                      shape="round"
+                      size="large"
+                      onClick={() => setVisible(true)}
+                    >
+                      Set up profile
+                    </Button>
+                  ) : (
+                    <Button
+                      shape="round"
+                      size="large"
+                      status={
+                        data?.user?.followers?.includes(user.uid)
+                          ? "danger"
+                          : "default"
+                      }
+                      type={
+                        data?.user?.followers?.includes(user.uid)
+                          ? "outline"
+                          : "default"
+                      }
+                      onClick={async () => {
+                        try {
+                          if (data?.user?.followers?.includes(user.uid)) {
+                            await unfollow(data?.user?._id);
+                            await mutate();
+                          } else {
+                            await follow(data?.user?._id);
+                            await mutate();
+                          }
+                        } catch (e) {
+                          Message.error((e as Error).message);
+                        }
+                      }}
+                    >
+                      {data?.user?.followers?.includes(user.uid)
+                        ? "Unfollow"
+                        : "Follow"}
+                    </Button>
+                  )}
                 </div>
-              </Link>
+              </div>
+              <h4 style={{ margin: 0, fontFamily: "inherit" }}>
+                {data?.user?.firstName + " " + data?.user?.lastName}
+              </h4>
+              <p style={{ margin: 0, color: "gray" }}>@{username}</p>
+              <p>{data?.user?.introduction}</p>
+              <div className="profile__icons">
+                <div style={{ display: "inline-flex", alignItems: "center" }}>
+                  <CalendarDot theme="outline" />
+                  <p style={{ margin: 0, color: "gray", marginLeft: 5 }}>
+                    Joined{" "}
+                    {new Date(data?.user?.createAt).toLocaleDateString(
+                      "en-US",
+                      {
+                        year: "numeric",
+                        month: "long",
+                      }
+                    )}
+                  </p>
+                </div>
+              </div>
+              <div className="profile__friends">
+                <Link to={`/${data?.user?.username}/following`}>
+                  <div className="profile__friends_field">
+                    <span style={{ fontWeight: "bold" }}>
+                      {data?.user?.following?.length || 0}{" "}
+                    </span>
+                    <span style={{ color: "var(--color-text-3)" }}>
+                      Following
+                    </span>
+                  </div>
+                </Link>
+                <Link to={`/${data?.user?.username}/followers`}>
+                  <div className="profile__friends_field">
+                    <span style={{ fontWeight: "bold" }}>
+                      {data?.user?.followers?.length || 0}{" "}
+                    </span>
+                    <span style={{ color: "var(--color-text-3)" }}>
+                      Followers
+                    </span>
+                  </div>
+                </Link>
+              </div>
             </div>
 
-            {perror ? (
-              <Result status="500" title={perror.message} />
-            ) : (
-              <Skeleton loading={!posts} image animation>
-                {posts && posts.length > 0 ? (
-                  posts.map((post: IPost) => (
-                    <Post post={post} key={post._id} />
+            <Menu
+              mode="horizontal"
+              defaultSelectedKeys={["tweets"]}
+              onClickMenuItem={(key) => {
+                setSelect(key);
+              }}
+            >
+              <Menu.Item
+                key="tweets"
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "larger",
+                }}
+              >
+                <span>Tweets</span>
+              </Menu.Item>
+              <Menu.Item
+                key="likes"
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "larger",
+                }}
+              >
+                <span>Likes</span>
+              </Menu.Item>
+            </Menu>
+
+            {select === "tweets" && (
+              <div style={{ marginTop: 16 }}>
+                {perror ? (
+                  <Result status="500" title={perror.message} />
+                ) : (
+                  <Skeleton loading={!posts} image animation>
+                    {posts && posts.length > 0 ? (
+                      posts.map((post: IPost) => (
+                        <Post post={post} key={post._id} />
+                      ))
+                    ) : (
+                      <Empty />
+                    )}
+                  </Skeleton>
+                )}
+              </div>
+            )}
+            {select === "likes" && (
+              <div style={{ marginTop: 16 }}>
+                {data && data.user.likes && data.user.likes.length > 0 ? (
+                  data.user.likes.map((postId: string) => (
+                    <Post postId={postId} key={postId} />
                   ))
                 ) : (
                   <Empty />
                 )}
-              </Skeleton>
+              </div>
             )}
           </div>
         )}
       </div>
+
+      {/*set profile modal*/}
       <Modal
         title={<IconTwitter />}
         visible={visible}
@@ -294,7 +347,7 @@ function Profile() {
                   bgPicture: bgPicture?.link,
                   introduction: introduction,
                 };
-                console.log(data);
+
                 setDisabled(true);
                 updateProfile(data)
                   .then((res) => {
